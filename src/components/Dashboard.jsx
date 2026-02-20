@@ -13,6 +13,9 @@ import Checkoutadmin from '../Admin/Checkoutadmin';
 import Usermanagment from '../Admin/Usermanagment';
 import Adminorders from '../Admin/Adminorders';
 import Orders from './Orders';
+import Superdashboard from '../SuperAdmin/Superdashboard';
+import Productupload from '../SuperAdmin/Productupload';
+import SuperAdminUser from '../SuperAdmin/SuperAdminUser';
 
 
 const Dashboard = () => {
@@ -32,6 +35,9 @@ const Dashboard = () => {
   <Route path='/usermanagement' element={<Usermanagment/>}/>
   <Route path='/adminorder' element={<Adminorders/>}/>
   <Route path="/orders" element={<Orders/>}/>
+  <Route path="/superadmindashboard" element={<Superdashboard/>}/>
+  <Route path="/productupload" element={<Productupload/>}/>
+  <Route path="/superadminusermanagement" element={<SuperAdminUser/>}/>
    </Routes>
   )
 }

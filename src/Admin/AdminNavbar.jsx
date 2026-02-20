@@ -50,7 +50,7 @@ const AdminNavbar = () => {
         className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="p-6 border-b flex justify-between items-center">
+        <div className="p-6 border-b flex bg-blue-950 text-white justify-between items-center">
           <h2 className="text-lg font-semibold">Menu</h2>
           <button
             className="text-xl"

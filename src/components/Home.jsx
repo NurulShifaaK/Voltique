@@ -54,10 +54,10 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col overflow-x-hidden selection:bg-black selection:text-white">
+    <div className=" min-h-screen flex flex-col overflow-x-hidden selection:bg-black selection:text-white">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 md:px-8 py-3 flex-1 w-full">
+      <main className="max-w-7xl bg-gray-100 mx-auto px-4 md:px-8 py-3 flex-1 w-full mt-16">
         
         {/* --- Hero Section with Auto-Slider --- */}
         <div className="relative h-[410px] md:h-[500px] w-full overflow-hidden rounded-3xl shadow-2xl border border-gray-100 bg-white">
@@ -86,7 +86,7 @@ const Home = () => {
                   whileHover={{ scale: 1.05, boxShadow: "0px 10px 30px rgba(0,0,0,0.1)" }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate("/products")}
-                  className="bg-gray-500 text-white text-sm sm:text-lg font-bold px-6 sm:px-8 sm:py-4 py-1 rounded-full w-fit mx-auto md:mx-0"
+                  className="bg-blue-950 text-white text-sm sm:text-lg font-bold px-6 sm:px-8 sm:py-4 py-1 rounded-full w-fit mx-auto md:mx-0"
                 >
                   Explore Products
                 </motion.button>
@@ -124,10 +124,10 @@ const Home = () => {
           >
             {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
               <div key={item} className="flex items-center sm:gap-6 gap-4 group">
-                <span className="sm:text-7xl text-xl font-black text-gray-300 group-hover:text-blue-500 transition-all duration-500 outline-text">
+                <span className="sm:text-7xl text-xl font-black text-blue-800 group-hover:text-blue-500 transition-all duration-500 outline-text">
                   0{item}
                 </span>
-                <span className="sm:text-2xl font-bold text-gray-400 uppercase tracking-widest group-hover:text-black transition-all">
+                <span className="sm:text-2xl font-bold text-blue-950 uppercase tracking-widest group-hover:text-black transition-all">
                   Voltique Exclusive
                 </span>
               </div>
@@ -139,7 +139,7 @@ const Home = () => {
 
         {/* --- Category Grid --- */}
         <section >
-          <motion.h2 initial="hidden" whileInView="visible" variants={fadeUp} className="sm:text-4xl text-2xl font-black text-center mb-16 tracking-tight">
+          <motion.h2 initial="hidden" whileInView="visible" variants={fadeUp} className="sm:text-4xl text-2xl font-bold text-center mb-8">
             Shop by Category
           </motion.h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 sm:gap-8 gap-2">

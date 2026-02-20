@@ -27,8 +27,18 @@ const handlelogin = async () => {
     localStorage.setItem("userRole", user.role);  
     localStorage.setItem("userid",user._id);
 
-    console.log(user._id)
-    const from = location.state?.from || (user.role === "USER" ? "/products" : "/admindashboard");
+    // console.log(user._id)
+      
+const roleRedirect = {
+  USER: "/products",
+  ADMIN: "/admindashboard",
+  SUPERADMIN: "/superadmindashboard",
+};
+
+const from = location.state?.from || roleRedirect[user.role] || "/";
+navigate(from, { replace: true });
+
+
 
     navigate(from, { replace: true });
   } catch (error) {
