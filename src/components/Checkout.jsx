@@ -10,7 +10,7 @@ import Navbar from "./Navbar";
 import axios from "axios";
 
 const Checkout = () => {
-   const API = import.meta.env.VITE_API_URL;
+   const API = "https://app-product-qh1f.onrender.com/api/v1";
   const navigate = useNavigate();
 const userid=localStorage.getItem("userid");
 

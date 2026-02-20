@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 
 const Login = () => {
-     const API = import.meta.env.VITE_API_URL;
+     const API = "https://app-product-qh1f.onrender.com/api/v1"
   const navigate = useNavigate();
   const[loginemail,setloginemail]=useState("");
   const[loginpass,setloginpass]=useState("");

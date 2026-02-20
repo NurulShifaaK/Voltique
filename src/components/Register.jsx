@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Register = () => {
-     const API = import.meta.env.VITE_API_URL;
+     const API = "https://app-product-qh1f.onrender.com/api/v1";
   const navigate = useNavigate();
   const[name,setname]=useState("")
   const[email,setemail]=useState("")

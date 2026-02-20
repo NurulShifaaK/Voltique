@@ -4,7 +4,7 @@ import axios from "axios";
 import { Package, Truck, CheckCircle, Clock } from "lucide-react";
 
 const Orders = () => {
-     const API = import.meta.env.VITE_API_URL;
+     const API = "https://app-product-qh1f.onrender.com/api/v1";
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const userid = localStorage.getItem("userid");

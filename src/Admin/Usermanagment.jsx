@@ -4,7 +4,7 @@ import axios from "axios";
 import { Trash2, User, Shield, CheckCircle } from "lucide-react";
 
 const Usermanagement = () => {
-  const API = import.meta.env.VITE_API_URL;
+  const API = "https://app-product-qh1f.onrender.com/api/v1"
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 

@@ -6,7 +6,7 @@ import Footer from "./Footer";
 import { MinusIcon, PlusCircle, PlusIcon } from "lucide-react";
 import { useNavigate} from "react-router-dom";
 const Singelproduct = () => {
-  const API = import.meta.env.VITE_API_URL;
+  const API = "https://app-product-qh1f.onrender.com/api/v1";
   const userid=localStorage.getItem("userid");
   const { id } = useParams();
   const [product, setProduct] = useState(null);

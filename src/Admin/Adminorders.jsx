@@ -4,7 +4,7 @@ import AdminNavbar from './AdminNavbar';
 import { ChevronDown, MapPin, Mail, Package } from 'lucide-react';
 
 const Adminorders = () => {
-     const API = import.meta.env.VITE_API_URL;
+     const API = "https://app-product-qh1f.onrender.com/api/v1";
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +23,7 @@ const Adminorders = () => {
 
   const updateStatus = async (orderId, newStatus) => {
     try {
-      await axios.put(`http://localhost:3000/api/v1/checkout/${orderId}`, { status: newStatus });
+      await axios.put(`${API}/checkout/${orderId}`, { status: newStatus });
       setOrders(orders.map(o => o._id === orderId ? { ...o, status: newStatus } : o));
     } catch (err) {
       alert("Error updating registry.");

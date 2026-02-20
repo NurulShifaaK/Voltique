@@ -15,7 +15,7 @@ import {
 import AdminNavbar from './AdminNavbar';
 
 const AdminDashboard = () => {
-  const API = import.meta.env.VITE_API_URL;
+  const API ="https://app-product-qh1f.onrender.com/api/v1"
   const [data, setData] = useState({
     orders: [],
     users: [],

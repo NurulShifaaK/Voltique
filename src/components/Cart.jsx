@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 import axios from 'axios'
 import { useNavigate} from "react-router-dom";
 const Cart = () => {
-       const API = import.meta.env.VITE_API_URL;
+const API = "https://app-product-qh1f.onrender.com/api/v1";
 const navigate = useNavigate();
 const [cart,setcart]=useState([])
 
@@ -13,7 +13,8 @@ const userid=localStorage.getItem("userid");
     },[])
 
     const getallcart=async()=>{
-     const res= await axios.get(`${API}/cart/${userid}`);
+    //  const res= await axios.get(`${API}/cart/${userid}`);
+    const res=await axios.get(`https://app-product-qh1f.onrender.com/api/v1/cart/${userid}`)
     console.log(res.data.cart.items);
      setcart(res.data.cart.items);
     }

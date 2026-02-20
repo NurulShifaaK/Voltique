@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 
 const Product = () => {
-  const API = import.meta.env.VITE_API_URL;
+  const API ="https://app-product-qh1f.onrender.com/api/v1"
   const [allproduct, setAllproduct] = useState([]);
   const[product,setproduct]=useState([])
   const [loading, setLoading] = useState(true);
