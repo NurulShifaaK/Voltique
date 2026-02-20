@@ -5,7 +5,7 @@ import { ArrowBigLeft, Heart } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Category = () => {
-  const API = import.meta.env.VITE_API_URL;
+  const API = "https://app-product-qh1f.onrender.com/api/v1";
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
