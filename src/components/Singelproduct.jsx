@@ -234,12 +234,12 @@ const Singelproduct = () => {
                 >
                   <ShoppingBag size={20} /> Add to Bag
                 </button>
-                <button 
+                {/* <button 
                   onClick={() => navigate("/checkout")}
                   className="flex items-center justify-center gap-3 border-2 border-gray-900 py-5 rounded-2xl font-bold hover:bg-gray-900 hover:text-white transition-all active:scale-[0.98]"
                 >
                   <CreditCard size={20} /> Secure Checkout
-                </button>
+                </button> */}
               </motion.div>
 
               {/* Professional Trust Badges */}
