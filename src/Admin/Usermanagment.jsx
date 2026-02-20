@@ -4,12 +4,13 @@ import axios from "axios";
 import { Trash2, User, Shield, CheckCircle } from "lucide-react";
 
 const Usermanagement = () => {
+  const API = import.meta.env.VITE_API_URL;
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/register");
+      const res = await axios.get(`${API}/register`);
       setUsers(res.data.alluser);
     } catch (err) {
       console.error(err);

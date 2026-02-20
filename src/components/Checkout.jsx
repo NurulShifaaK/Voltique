@@ -10,7 +10,7 @@ import Navbar from "./Navbar";
 import axios from "axios";
 
 const Checkout = () => {
-
+   const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 const userid=localStorage.getItem("userid");
 
@@ -37,7 +37,7 @@ const userid=localStorage.getItem("userid");
   const getallcart = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/v1/cart/${userid}`
+        `${API}/cart/${userid}`
       );
       setcheckcart(res.data.cart.items);
       console.log(res.data.cart.items)
@@ -91,7 +91,7 @@ const userid=localStorage.getItem("userid");
       };
 
       const res = await axios.post(
-        "http://localhost:3000/api/v1/checkout",
+        `${API}/checkout`,
         orderData
       );
 

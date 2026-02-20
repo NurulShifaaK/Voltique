@@ -4,12 +4,13 @@ import AdminNavbar from './AdminNavbar';
 import { ChevronDown, MapPin, Mail, Package } from 'lucide-react';
 
 const Adminorders = () => {
+     const API = import.meta.env.VITE_API_URL;
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchAdminOrders = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/checkout");
+      const res = await axios.get(`${API}/checkout`);
       setOrders(res.data.orders);
     } catch (err) {
       console.error(err);

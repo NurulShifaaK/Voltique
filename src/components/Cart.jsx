@@ -3,6 +3,7 @@ import Navbar from './Navbar'
 import axios from 'axios'
 import { useNavigate} from "react-router-dom";
 const Cart = () => {
+       const API = import.meta.env.VITE_API_URL;
 const navigate = useNavigate();
 const [cart,setcart]=useState([])
 
@@ -12,7 +13,7 @@ const userid=localStorage.getItem("userid");
     },[])
 
     const getallcart=async()=>{
-     const res= await axios.get(`http://localhost:3000/api/v1/cart/${userid}`);
+     const res= await axios.get(`${API}/cart/${userid}`);
     console.log(res.data.cart.items);
      setcart(res.data.cart.items);
     }
@@ -21,7 +22,7 @@ const userid=localStorage.getItem("userid");
 
     const handleremovecart=async(productid)=>{
         try{
-            await axios.delete(`http://localhost:3000/api/v1/cart/${userid}/${productid}`)
+            await axios.delete(`${API}/cart/${userid}/${productid}`)
              getallcart();
         }
         catch(err){

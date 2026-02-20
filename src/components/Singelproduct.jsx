@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import { MinusIcon, PlusCircle, PlusIcon } from "lucide-react";
 import { useNavigate} from "react-router-dom";
 const Singelproduct = () => {
+  const API = import.meta.env.VITE_API_URL;
   const userid=localStorage.getItem("userid");
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -15,7 +16,7 @@ const Singelproduct = () => {
     const fetchsingleproduct = async () => {
       try {
         const res = await axios.get(
-          `https://app-product-qh1f.onrender.com/api/v1/product/${id}`
+          `${API}/product/${id}`
         );
         setProduct(res.data.singleproduct);
       } catch (err) {
@@ -34,7 +35,7 @@ const Singelproduct = () => {
 
  const handleaddcart=async()=>{
     try{
-    await axios.post("http://localhost:3000/api/v1/addtocart",{
+    await axios.post(`${API}/addtocart`,{
         sessionId:userid,
         productId:id,
         quantity:increment,

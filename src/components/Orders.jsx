@@ -4,6 +4,7 @@ import axios from "axios";
 import { Package, Truck, CheckCircle, Clock } from "lucide-react";
 
 const Orders = () => {
+     const API = import.meta.env.VITE_API_URL;
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const userid = localStorage.getItem("userid");
@@ -11,7 +12,7 @@ const Orders = () => {
   useEffect(() => {
     const orderstatus = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/v1/checkout/${userid}`);
+        const res = await axios.get(`${API}/checkout/${userid}`);
         setOrders(res.data.orders);
       } catch (err) {
         console.log(err.response?.data || err.message);

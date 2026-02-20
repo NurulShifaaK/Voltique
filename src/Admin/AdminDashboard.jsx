@@ -15,6 +15,7 @@ import {
 import AdminNavbar from './AdminNavbar';
 
 const AdminDashboard = () => {
+  const API = import.meta.env.VITE_API_URL;
   const [data, setData] = useState({
     orders: [],
     users: [],
@@ -27,9 +28,12 @@ const AdminDashboard = () => {
     const fetchDashboardData = async () => {
       try {
         const [orderRes, userRes] = await Promise.all([
-          axios.get("http://localhost:3000/api/v1/checkout"),
-          axios.get("http://localhost:3000/api/v1/register")
+          axios.get(`${API}/checkout`),
+          axios.get(`${API}/register`)
         ]);
+        console.log("Order API full response:", orderRes);
+console.log("Order API data:", orderRes.data);
+console.log("User API data:", userRes.data);
 
         const orders = orderRes.data.orders;
         const revenue = orders.reduce((acc, curr) => acc + curr.totalamount, 0);

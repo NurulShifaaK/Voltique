@@ -5,30 +5,17 @@ import { motion } from "framer-motion";
 import axios from "axios";
 
 const Login = () => {
+     const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const[loginemail,setloginemail]=useState("");
   const[loginpass,setloginpass]=useState("");
   const[message,setmessage]=useState("")
 
-//   const handlelogin=async()=>{
-//     const res=await axios.post("http://localhost:3000/api/v1/login",{
-//         email:loginemail,
-//         password:loginpass
-//     })
-//     console.log(res.data.user.role)
-//     if(res.data.user.role=="USER"){
-//         navigate("/products")
-//     }
-//     else{
-//         navigate("/admindashboard")
-//     }
-//     // navigate("/products")
-//   }
 
 
 const handlelogin = async () => {
   try {
-    const res = await axios.post("http://localhost:3000/api/v1/login", {
+    const res = await axios.post(`${API}/login`, {
       email: loginemail,
       password: loginpass,
     });

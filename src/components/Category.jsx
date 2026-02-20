@@ -5,6 +5,7 @@ import { ArrowBigLeft, Heart } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Category = () => {
+  const API = import.meta.env.VITE_API_URL;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +22,7 @@ const Category = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/v1/products/category?category=${category}`
+          `${API}/products/category?category=${category}`
         );
         setProducts(res.data.products);
         console.log(res.data.products);

@@ -5,6 +5,7 @@ import { Heart, RefreshCcwDotIcon, TimerReset } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Product = () => {
+  const API = import.meta.env.VITE_API_URL;
   const [allproduct, setAllproduct] = useState([]);
   const[product,setproduct]=useState([])
   const [loading, setLoading] = useState(true);
@@ -21,7 +22,7 @@ const Product = () => {
         const res = await axios.get(
         //   "https://app-product-qh1f.onrender.com/api/v1/products"
         // `http://localhost:3000/api/v1/products?keyword=${search || ""}`
-         `http://localhost:3000/api/v1/products?keyword=${search || ""}&category=${category || ""}`
+         `${API}/products?keyword=${search || ""}&category=${category || ""}`
    
         );
         setAllproduct(res.data.products);
