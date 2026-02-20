@@ -3,7 +3,7 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import { Heart, RefreshCcwDotIcon, TimerReset } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+
 
 const Product = () => {
   const API = import.meta.env.VITE_API_URL;
