@@ -17,6 +17,7 @@ const Navbar = () => {
           <Link to="/products" className="hover:text-gray-600">Products</Link>
            <Link to="/cart" className="hover:text-gray-600">Cart</Link>
             <Link to="/orders" className="hover:text-gray-600">Order</Link>
+               <Link to="/login" className="hover:text-gray-600">Logout</Link>
 
         </div>
 
@@ -50,8 +51,8 @@ const Navbar = () => {
           <Link to="/" onClick={() => setOpen(false)}>Home</Link>
           <Link to="/products" onClick={() => setOpen(false)}>Products</Link>
           <Link to="/cart" onClick={() => setOpen(false)}>Cart</Link>
-           <Link to="/orders" onClick={() => setOpen(false)}>Order</Link>
-     
+          <Link to="/orders" onClick={() => setOpen(false)}>Order</Link>
+           <Link to="/login" onClick={() => setOpen(false)}>Logout</Link>
 
         </div>
       </div>
