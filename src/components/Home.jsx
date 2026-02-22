@@ -17,7 +17,7 @@ const Home = () => {
       title: "Premium Gadgets",
       subtitle: "in Voltique",
       desc: "Shop the latest electronics crafted for speed, style, and seamless performance.",
-      img: "https://i.pinimg.com/1200x/a2/bd/77/a2bd772fa3e1bd696391fb57ac2cb9ba.jpg",
+      img: head,
     //   color: "from-blue-600 to-cyan-400"
     },
     {
@@ -60,7 +60,7 @@ const Home = () => {
       <main className="max-w-7xl bg-gray-100 mx-auto px-4 md:px-8 py-3 flex-1 w-full mt-16">
         
         {/* --- Hero Section with Auto-Slider --- */}
-        <div className="relative h-[410px] md:h-[500px] w-full overflow-hidden rounded-3xl shadow-2xl border border-gray-100 bg-white">
+        <div className="relative h-[410px] md:h-[500px] w-full overflow-hidden rounded-3xl shadow-2xl border border-gray-100 bg-blue-950">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
@@ -72,21 +72,21 @@ const Home = () => {
             >
               <div className="md:w-1/2 flex flex-col gap-2 sm:gap-5 text-center md:text-left z-10">
                 <motion.h1 
-                  className="text-2xl md:text-6xl font-black tracking-tighter text-gray-900"
+                  className="text-2xl md:text-6xl font-bold tracking-tighter text-white/50"
                 >
                   {heroSlides[currentSlide].title} <br /> 
                   <span className={`${heroSlides[currentSlide].color}`}>
                     {heroSlides[currentSlide].subtitle}
                   </span>
                 </motion.h1>
-                <p className="sm:text-lg text-sm text-gray-500 sm:leading-relaxed max-w-md mx-auto md:mx-0">
+                <p className="sm:text-lg text-sm text-white/70 sm:leading-relaxed max-w-md mx-auto md:mx-0">
                   {heroSlides[currentSlide].desc}
                 </p>
                 <motion.button
                   whileHover={{ scale: 1.05, boxShadow: "0px 10px 30px rgba(0,0,0,0.1)" }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate("/products")}
-                  className="bg-blue-950 text-white text-sm sm:text-lg font-bold px-6 sm:px-8 sm:py-4 py-1 rounded-full w-fit mx-auto md:mx-0"
+                  className="bg-white text-blue-950 text-sm sm:text-lg font-bold px-6 sm:px-8 sm:py-4 py-1 rounded-full w-fit mx-auto md:mx-0"
                 >
                   Explore Products
                 </motion.button>
@@ -127,8 +127,8 @@ const Home = () => {
                 <span className="sm:text-7xl text-xl font-black text-blue-800 group-hover:text-blue-500 transition-all duration-500 outline-text">
                   0{item}
                 </span>
-                <span className="sm:text-2xl font-bold text-blue-950 uppercase tracking-widest group-hover:text-black transition-all">
-                  Voltique Exclusive
+                <span className="sm:text-3xl text-xl font-bold text-blue-950/50 uppercase tracking-widest group-hover:text-black transition-all">
+                  SDL Creative groups
                 </span>
               </div>
             ))}
@@ -144,10 +144,10 @@ const Home = () => {
           </motion.h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 sm:gap-8 gap-2">
             {[
-              { img: iphone, cat: "iPhone", color: "hover:border-blue-500" },
-              { img: mac, cat: "Mac", color: "hover:border-purple-500" },
-              { img: watch, cat: "Watch", color: "hover:border-orange-500" },
-              { img: head, cat: "Headphones", color: "hover:border-pink-500" }
+              { img: "https://i.pinimg.com/736x/20/78/aa/2078aa60db3cb611f884774708b1a3d6.jpg", cat: "iPhone", color: "hover:border-blue-500" },
+              { img: "https://i.pinimg.com/1200x/ac/c7/90/acc7905efc6a54fe101a3d1483c7dcd1.jpg", cat: "Mac", color: "hover:border-purple-500" },
+              { img: "https://i.pinimg.com/736x/4a/11/50/4a1150f2b62dbab4e4ebe3506a1e48d5.jpg", cat: "Watch", color: "hover:border-orange-500" },
+              { img: "https://i.pinimg.com/1200x/c9/95/38/c99538e32552c4c6bfcb732f1bf4e838.jpg", cat: "Headphones", color: "hover:border-pink-500" }
             ].map(({ img, cat, color }) => (
               <motion.div
                 key={cat}
@@ -164,40 +164,52 @@ const Home = () => {
           </div>
         </section>
 
-        {/* --- Automatically Sliding Testimonials --- */}
-        <section className="sm:mt-12 mt-6  ">
-          <motion.h2 className="sm:text-4xl text-xl font-black text-center sm:mb-15 mb-5 tracking-tight">Voices of Voltique</motion.h2>
-          <div className="relative overflow-hidden ">
-            <motion.div 
-              className="flex sm:gap-8"
-              animate={{ x: [0, -2000] }}
-              transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-            >
-              {[...Array(2)].map((_, i) => (
-                <div key={i} className="flex gap-8">
-                  {[
-                    { name: "Aarav Mehta", role: "Tech Enthusiast", review: "Absolutely premium quality! The performance and build feel next level." },
-                    { name: "Sneha Kapoor", role: "Designer", review: "Super smooth experience. The gadgets look stunning and work flawlessly." },
-                    { name: "Rahul Sharma", role: "Entrepreneur", review: "Fast shipping and top-tier electronics. My go-to store for tech upgrades." },
-                    { name: "Esha Verma", role: "Vlogger", review: "The camera quality on the new iPhone is insane. Voltique is the best!" }
-                  ].map((item, idx) => (
-                    <div key={idx} className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 sm:w-[350px] w-[200px] mb-5">
-                      <div className="flex mb-4 text-yellow-400 text-sm">★★★★★</div>
-                      <p className="text-gray-600 text-[10px] italic sm:mb-8 mb-3 sm:text-lg leading-relaxed">"{item.review}"</p>
-                      <div className="flex items-center gap-4">
-                        <div className="sm:h-12 sm:w-12 h-8 w-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                          {item.name[0]}
+
+              <section className="bg-blue-950 mt-20 py-10 rounded-xl relative overflow-hidden">
+          {/* Decorative background text */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[20vw] font-black text-white/5 whitespace-nowrap select-none">REVIEWS</div>
+          
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="text-center mb-20">
+              <span className="text-blue-400 text-xs font-black uppercase tracking-widest mb-4 block">Testimonials</span>
+              <h2 className="text-4xl md:text-5xl font-light text-white italic tracking-tight">Voices of SDL</h2>
+            </div>
+
+            <div className="relative flex overflow-hidden py-10">
+              <motion.div 
+                className="flex gap-8"
+                animate={{ x: [0, -2500] }}
+                transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
+              >
+                {[...Array(2)].map((_, i) => (
+                  <div key={i} className="flex gap-8">
+                    {[
+                      { name: "Aarav Mehta", role: "Tech Enthusiast", review: "Absolutely premium quality! The performance and build feel next level." },
+                      { name: "Sneha Kapoor", role: "Creative Designer", review: "Super smooth experience. The gadgets look stunning and work flawlessly." },
+                      { name: "Rahul Sharma", role: "Tech Entrepreneur", review: "Fast shipping and top-tier electronics. My go-to store for tech upgrades." },
+                      { name: "Esha Verma", role: "Travel Vlogger", review: "The camera quality on the new iPhone is insane. Voltique is the best!" }
+                    ].map((item, idx) => (
+                      <div key={idx} className="bg-white/5 backdrop-blur-xl p-10 rounded-[3rem] border border-white/10 w-[350px] md:w-[450px] group hover:bg-white transition-all duration-500">
+                        {/* <Quote className="text-blue-500 mb-6 group-hover:text-[#0A2540]" size={32} /> */}
+                        <div className="flex gap-1 mb-6 text-yellow-400">
+                          {/* {[...Array(5)].map((_, s) => <Star key={s} size={14} fill="currentColor" />)} */}
                         </div>
-                        <div>
-                          <h4 className="font-bold text-sm sm:text-[14px] text-gray-900">{item.name}</h4>
-                          <p className="sm:text-xs text-[10px] text-gray-400 font-bold uppercase tracking-widest">{item.role}</p>
+                        <p className="text-blue-100 group-hover:text-gray-600 text-lg md:text-xl font-medium leading-relaxed mb-10 italic">"{item.review}"</p>
+                        <div className="flex items-center gap-4">
+                          <div className="h-14 w-14 rounded-2xl bg-blue-500 flex items-center justify-center text-white font-black text-xl shadow-lg">
+                            {item.name[0]}
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-white group-hover:text-[#0A2540]">{item.name}</h4>
+                            <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">{item.role}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </motion.div>
+                    ))}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </section>
       </main>
@@ -208,3 +220,4 @@ const Home = () => {
 };
 
 export default Home;
+

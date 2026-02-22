@@ -1,288 +1,303 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ShieldCheck,
-  ChevronRight,
-  CreditCard,
-  UserCheck,
-  Lock,
-  Truck,
-  ArrowLeft
+import { 
+  ShieldCheck, 
+  ChevronRight, 
+  Truck, 
+  UserCheck, 
+  ArrowLeft, 
+  MonitorSmartphone, 
+  Lock, 
+  CreditCard, 
+  Wallet,
+  ChevronLeft
 } from "lucide-react";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import axios from "axios";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Checkout = () => {
-  const API = "https://app-product-qh1f.onrender.com/api/v1";
+  //  const API = "https://app-product-qh1f.onrender.com/api/v1";
+  const API = "http://localhost:3000/api/v1";
   const navigate = useNavigate();
   const userid = localStorage.getItem("userid");
 
   const [checkcart, setcheckcart] = useState([]);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    street: "",
-    city: "",
-    state: "",
-    pincode: "",
-    phone: "",
-    cardNumber: "",
-    expiry: "",
-    cvv: "",
+    firstName: "", lastName: "", email: "",
+    street: "", city: "", state: "", pincode: "", phone: ""
   });
 
-  useEffect(() => {
-    getallcart();
-  }, [userid]);
-
-  const getallcart = async () => {
+  // Razorpay Payment Logic (Functionality preserved)
+  const handlepayment = async () => {
+    const subtotal = checkcart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+    const total = subtotal + (subtotal * 0.05); // 5% Tax
     try {
-      const res = await axios.get(`${API}/cart/${userid}`);
-      setcheckcart(res.data.cart.items);
+      const { data } = await axios.post(`${API}/createorder`, {
+        amount: total
+      });
+      const options = {
+        key: data.key,
+        amount: total * 100,
+        currency: "INR",
+        name: "SDL Creative Groups",
+        description: "Order Payment",
+        order_id: data.orderId,
+        handler: function (response) {
+          alert("Payment Successful");
+          console.log(response);
+          // You might want to trigger handleSubmit(null) here after successful payment
+        },
+        theme: {
+          color: "#0A2540",
+        },
+      };
+      const razor = new window.Razorpay(options);
+      razor.open();
     } catch (err) {
-      console.log(err);
+      console.log("Payment Error:", err);
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  useEffect(() => {
+    const getcart = async () => {
+      try {
+        const res = await axios.get(`${API}/cart/${userid}`);
+        const validItems = res.data.cart.items.filter(item => item.product !== null);
+        setcheckcart(validItems);
+      } catch (err) { console.log(err); }
+    };
+    if (userid) getcart();
+  }, [userid, API]);
 
-  const subtotal = checkcart.reduce(
-    (acc, item) => acc + item.product.price * item.quantity,
-    0
-  );
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const subtotal = checkcart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
   const tax = subtotal * 0.05;
   const total = subtotal + tax;
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     try {
       const orderData = {
-        userid: userid,
+        userid,
         items: checkcart,
-        personalDetails: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-        },
-        shippingAddress: {
-          street: formData.street,
-          city: formData.city,
-          state: formData.state,
-          pincode: formData.pincode,
-          phone: formData.phone,
-        },
-        paymentDetails: {
-          cardNumber: formData.cardNumber,
-          expiry: formData.expiry,
-          cvv: formData.cvv,
-        },
-        subtotal,
-        tax,
-        total,
+        personalDetails: { firstName: formData.firstName, lastName: formData.lastName, email: formData.email },
+        shippingAddress: { ...formData },
+        total: total
       };
 
-      await axios.post(`${API}/checkout`, orderData);
-      alert("Order placed successfully!");
-      navigate("/orders");
+      const res = await axios.post(`${API}/checkout`, orderData);
+      if (res.data.success) {
+        alert("Order and email send sucessfully");
+        navigate("/orders");
+      }
     } catch (err) {
-      console.log(err);
-      alert("Error placing order");
+      // alert(err.response?.data?.message || "Error placing order");
     }
   };
 
-  const inputStyle = "w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-gray-400 text-gray-700 bg-white";
-  const labelStyle = "block text-sm font-semibold text-gray-700 mb-2";
+  // const cashondelivery=()=>{
 
+  // }
+
+  const[cash,setcash]=useState("")
   return (
-    <div className="bg-[#F8F9FA] min-h-screen text-gray-900 font-sans">
-      <Navbar />
+    <div className="bg-[#fcfcfc] min-h-screen font-sans text-gray-900 flex flex-col">
+      <div className="sticky top-0 z-50">
+        <Navbar />
+      </div>
 
-      <main className="max-w-7xl mx-auto mt-15 px-4 sm:px-6 py-8 lg:py-12">
-        {/* Back Button */}
-        <button 
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-blue-600 mb-8 transition-colors"
+      {/* --- LUXURY HERO SECTION --- */}
+      <section className="relative h-[300px] bg-blue-950 flex flex-col justify-center items-center px-6 overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center z-10"
         >
-          <ArrowLeft size={18} /> Back to Bag
-        </button>
-
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
-          
-          {/* LEFT SIDE: FORMS */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="lg:col-span-7 space-y-10"
+          <button 
+            onClick={() => navigate(-1)}
+            className="text-[11px] font-bold uppercase tracking-[0.3em] text-blue-400 mb-4 flex items-center justify-center gap-2 mx-auto hover:text-white transition-colors"
           >
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900">Secure Checkout</h1>
-              <p className="text-gray-500 mt-2">Complete your purchase by providing your details below.</p>
-            </div>
+            <ChevronLeft size={14} /> Back to Bag
+          </button>
+          <h1 className="text-5xl md:text-6xl font-light tracking-tighter italic text-white">
+            Secure Checkout
+          </h1>
+        </motion.div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15vw] font-black text-white/5 -z-0 select-none uppercase">
+          Payment
+        </div>
+      </section>
 
+      {/* --- MAIN CONTENT --- */}
+      <main className="max-w-7xl mx-auto px-6 py-16 w-full flex-1">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          {/* LEFT: FORM FIELDS */}
+          <div className="lg:col-span-7 space-y-10">
+            
             {/* Personal Details */}
-            <section className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
-                  <UserCheck size={20} />
+            <motion.section 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-gray-100/60 p-8 rounded-[2.5rem] border border-gray-100"
+            >
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-[#0A2540] rounded-2xl text-white">
+                    <UserCheck size={20} />
                 </div>
-                <h2 className="text-xl font-bold">Personal Details</h2>
+                <h2 className="text-2xl font-semibold text-[#0A2540]">Personal Information</h2>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className={labelStyle}>First Name</label>
-                  <input type="text" name="firstName" placeholder="e.g. John" value={formData.firstName} onChange={handleChange} className={inputStyle} required />
-                </div>
-                <div>
-                  <label className={labelStyle}>Last Name</label>
-                  <input type="text" name="lastName" placeholder="e.g. Doe" value={formData.lastName} onChange={handleChange} className={inputStyle} required />
-                </div>
-                <div className="sm:col-span-2">
-                  <label className={labelStyle}>Email Address</label>
-                  <input type="email" name="email" placeholder="john@example.com" value={formData.email} onChange={handleChange} className={inputStyle} required />
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input name="firstName" placeholder="First Name" onChange={handleChange} className="bg-white/80 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all outline-none" required />
+                <input name="lastName" placeholder="Last Name" onChange={handleChange} className="bg-white/80 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all outline-none" required />
+                <input name="email" type="email" placeholder="Email Address" onChange={handleChange} className="bg-white/80 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all outline-none md:col-span-2" required />
               </div>
-            </section>
+            </motion.section>
 
             {/* Shipping Address */}
-            <section className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
-                  <Truck size={20} />
+            <motion.section 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-gray-100/60 p-8 rounded-[2.5rem] border border-gray-100"
+            >
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-[#0A2540] rounded-2xl text-white">
+                    <Truck size={20} />
                 </div>
-                <h2 className="text-xl font-bold">Shipping Address</h2>
+                <h2 className="text-2xl font-semibold text-[#0A2540]">Delivery Details</h2>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-6 gap-6">
-                <div className="sm:col-span-6">
-                  <label className={labelStyle}>Street Address</label>
-                  <input type="text" name="street" placeholder="123 Luxury Lane" value={formData.street} onChange={handleChange} className={inputStyle} required />
-                </div>
-                <div className="sm:col-span-3">
-                  <label className={labelStyle}>City</label>
-                  <input type="text" name="city" value={formData.city} onChange={handleChange} className={inputStyle} required />
-                </div>
-                <div className="sm:col-span-3">
-                  <label className={labelStyle}>State</label>
-                  <input type="text" name="state" value={formData.state} onChange={handleChange} className={inputStyle} required />
-                </div>
-                <div className="sm:col-span-3">
-                  <label className={labelStyle}>Pincode</label>
-                  <input type="number" name="pincode" value={formData.pincode} onChange={handleChange} className={inputStyle} required />
-                </div>
-                <div className="sm:col-span-3">
-                  <label className={labelStyle}>Phone Number</label>
-                  <input type="number" name="phone" value={formData.phone} onChange={handleChange} className={inputStyle} required />
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input name="street" placeholder="Street Address" onChange={handleChange} className="bg-white/80 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all outline-none md:col-span-2" required />
+                <input name="city" placeholder="City" onChange={handleChange} className="bg-white/80 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all outline-none" required />
+                <input name="state" placeholder="State" onChange={handleChange} className="bg-white/80 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all outline-none" required />
+                <input name="pincode" placeholder="Pincode" onChange={handleChange} className="bg-white/80 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all outline-none" required />
+                <input name="phone" placeholder="Phone Number" onChange={handleChange} className="bg-white/80 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all outline-none" required />
               </div>
-            </section>
+            </motion.section>
 
             {/* Payment Method */}
-            <section className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
-                    <CreditCard size={20} />
-                  </div>
-                  <h2 className="text-xl font-bold">Payment Method</h2>
+            <motion.section 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-gray-100/60 p-8 rounded-[2.5rem] border border-gray-100"
+            >
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-[#0A2540] rounded-2xl text-white">
+                    <MonitorSmartphone size={20} />
                 </div>
-                <div className="flex gap-2">
-                   <div className="w-8 h-5 bg-gray-100 rounded"></div>
-                   <div className="w-8 h-5 bg-gray-100 rounded"></div>
+                <h2 className="text-2xl font-semibold text-[#0A2540]">Select Payment</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-6 bg-white rounded-[2rem] border border-gray-100 flex items-center gap-4 hover:border-blue-500 transition-all cursor-pointer group shadow-sm">
+                    <div className="p-3 bg-gray-100 rounded-xl group-hover:bg-blue-50 transition-colors">
+                        <Wallet className="text-gray-400 group-hover:text-blue-600" />
+                    </div>
+                    <span 
+                    // onClick={()=>{cashondelivery("click")}}
+                    onClick={()=>setcash(true)}
+                    className="font-bold text-[#0A2540]">Cash on Delivery</span>
+                    
+                </div>
+                
+                <div 
+                    onClick={handlepayment}
+                    className="p-6 bg-white rounded-[2rem] border-2 border-transparent flex items-center gap-4 hover:border-blue-500 transition-all cursor-pointer group shadow-sm"
+                >
+                    <div className="p-3 bg-gray-100 rounded-xl group-hover:bg-blue-50 transition-colors">
+                        <CreditCard className="text-gray-400 group-hover:text-blue-600" />
+                    </div>
+                    <span className="font-bold text-[#0A2540]">Pay with Razorpay</span>
                 </div>
               </div>
+            </motion.section>
+          </div>
 
-              <div className="space-y-6">
-                <div className="relative">
-                  <label className={labelStyle}>Card Number</label>
-                  <div className="relative">
-                    <input type="text" name="cardNumber" placeholder="0000 0000 0000 0000" value={formData.cardNumber} onChange={handleChange} className={`${inputStyle} pl-12`} required />
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+          {/* RIGHT: SUMMARY SIDEBAR */}
+          <div className="lg:col-span-5">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-blue-950 text-white p-10 rounded-[2.5rem] sticky top-28 shadow-2xl overflow-hidden"
+            >
+              {/* Decorative circle */}
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl" />
+              
+              <div className="flex items-center gap-3 mb-8 relative">
+                  <div className="p-2 bg-white/10 rounded-lg">
+                    <ShieldCheck size={20} className="text-blue-400" />
                   </div>
-                </div>
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <label className={labelStyle}>Expiry (MM/YY)</label>
-                    <input type="text" name="expiry" placeholder="12/28" value={formData.expiry} onChange={handleChange} className={inputStyle} required />
-                  </div>
-                  <div>
-                    <label className={labelStyle}>CVV</label>
-                    <input type="password" name="cvv" placeholder="***" value={formData.cvv} onChange={handleChange} className={inputStyle} required />
-                  </div>
-                </div>
+                  <h2 className="text-xl font-semibold tracking-tight">Order Summary</h2>
               </div>
-            </section>
-          </motion.div>
 
-          {/* RIGHT SIDE: SUMMARY */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-5"
-          >
-            <div className="bg-white rounded-3xl p-6 mt-25 sm:p-8 border border-gray-100 shadow-xl lg:sticky lg:top-8">
-              <h3 className="text-lg font-bold text-gray-900 mb-6">Order Summary</h3>
-
-              <div className="max-h-[400px] overflow-y-auto pr-2 custom-scrollbar space-y-4 mb-8">
-                {checkcart.map((item) => (
-                  <div key={item._id} className="flex gap-4 items-center p-3 rounded-2xl hover:bg-gray-50 transition-colors">
-                    <div className="w-20 h-20 bg-gray-50 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center">
-                      <img src={item.product.images[0]?.url} alt={item.product.name} className="w-16 h-16 object-contain mix-blend-multiply" />
+              <div className="space-y-4 mb-8 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar relative">
+                {checkcart.map(item => (
+                  <div key={item._id} className="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/5">
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium line-clamp-1 w-40">{item.product.name}</span>
+                      <span className="text-[10px] text-gray-400 uppercase tracking-widest">Qty: {item.quantity}</span>
                     </div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-sm text-gray-900 line-clamp-1">{item.product.name}</p>
-                      <p className="text-xs font-semibold text-gray-500 mt-1">Qty: {item.quantity}</p>
-                      <p className="text-sm font-bold text-blue-600 mt-1">₹ {(item.product.price * item.quantity).toLocaleString()}</p>
-                    </div>
+                    <span className="font-semibold italic">₹{(item.product.price * item.quantity).toLocaleString()}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="space-y-4 border-t border-gray-100 pt-6">
-                <div className="flex justify-between text-sm font-semibold text-gray-500">
+              <div className="space-y-4 text-sm relative">
+                <div className="flex justify-between opacity-60">
                   <span>Subtotal</span>
-                  <span>₹ {subtotal.toLocaleString()}</span>
+                  <span>₹{subtotal.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between text-sm font-semibold text-gray-500">
-                  <span>Shipping</span>
-                  <span className="text-green-600 uppercase text-[10px] tracking-widest font-bold">Complimentary</span>
+                <div className="flex justify-between opacity-60">
+                  <span>Shipping Fee</span>
+                  <span className="text-blue-400 font-bold text-[10px] uppercase">Complimentary</span>
                 </div>
-                <div className="flex justify-between text-sm font-semibold text-gray-500">
-                  <span>Estimated Tax (5%)</span>
-                  <span>₹ {tax.toLocaleString()}</span>
+                <div className="flex justify-between opacity-60">
+                  <span>GST (5%)</span>
+                  <span>₹{tax.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between py-4 border-t border-gray-100 mt-4">
-                  <span className="text-xl font-bold text-gray-900">Total</span>
-                  <span className="text-2xl font-black text-blue-600">₹ {total.toLocaleString()}</span>
+                
+                <div className="h-[1px] bg-white/10 my-6" />
+                
+                <div className="flex justify-between items-end">
+                  <span className="text-xl font-light italic">Total Due:</span>
+                  <p className="text-3xl font-semibold">₹{total.toLocaleString()}</p>
                 </div>
               </div>
+              <p className="mt-5 text-red-500 ">{cash}</p>
 
-              <button
+              <button 
                 type="submit"
-                className="w-full bg-blue-950 text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 active:scale-[0.98]"
+                onClick={handleSubmit}
+                className="w-full mt-5 bg-white text-[#0A2540] py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-blue-400 hover:text-white transition-all shadow-xl group"
               >
-                Place Secure Order
-                <ChevronRight size={20} />
+                <Lock size={18} /> COMPLETE ORDER <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <div className="mt-6 p-4 bg-gray-50 rounded-2xl flex items-center gap-3">
-                <ShieldCheck className="text-green-600" size={24} />
-                <p className="text-[11px] font-semibold text-gray-500 leading-tight">
-                  Your data is protected by industry-standard SSL encryption. By placing this order, you agree to our Terms of Service.
-                </p>
+              <div className="mt-8 flex flex-col items-center gap-4 opacity-30 grayscale relative">
+                 <p className="text-[10px] font-bold tracking-[0.2em] uppercase">Trusted Checkout</p>
+                 <div className="flex gap-4 h-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" />
+                 </div>
               </div>
+            </motion.div>
+            
+            <div className="mt-8 p-6 border border-dashed border-gray-200 rounded-[2rem] flex items-center gap-4">
+                <ShieldCheck className="text-gray-300" size={32} />
+                <p className="text-[11px] text-gray-400 font-medium leading-relaxed uppercase tracking-wider">
+                    Your transaction is encrypted. Our servers do not store your full card details for maximum security.
+                </p>
             </div>
-          </motion.div>
+          </div>
         </form>
       </main>
+      <Footer />
     </div>
   );
 };

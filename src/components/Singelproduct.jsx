@@ -32,12 +32,20 @@ const Singelproduct = () => {
 
   const handleaddcart = async () => {
     try {
+
+       if(!userid){
+        navigate("/login");
+        return;
+      }
+      
       await axios.post(`${API}/addtocart`, {
         sessionId: userid,
         productId: id,
         quantity: increment,
       });
+     
       navigate("/cart");
+      
     } catch (err) {
       console.log(err);
     }

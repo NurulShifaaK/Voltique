@@ -28,6 +28,7 @@ const Product = () => {
       try {
         const res = await axios.get(`${API}/products?keyword=${search || ""}&category=${category || ""}`);
         setAllproduct(res.data.products);
+        console.log(res.data.products)
       } catch (error) {
         console.log("Error fetching products:", error);
       } finally {
@@ -67,7 +68,7 @@ const Product = () => {
         
         {/* Background Decor */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] font-black text-gray-50/20 -z-0 select-none">
-          ECHO
+          PRODUCT
         </div>
       </section>
 
@@ -149,11 +150,44 @@ const Product = () => {
                         <h2 className="text-sm font-medium text-gray-800 tracking-tight">{item.name}</h2>
                       </div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{item.category}</p>
-                      <div className="flex items-center gap-4 pt-2">
+                      {/* <div className="flex items-center gap-4 pt-2">
                         <p className="text-base font-light italic">₹{item.price.toLocaleString()}</p>
                         <div className="h-[1px] flex-1 bg-gray-100" />
                         <ShoppingBag size={14} className="text-gray-300 group-hover:text-black transition-colors" />
-                      </div>
+                      </div> */}
+
+                     <div className="flex items-center gap-4 pt-2">
+  <div className="flex items-center gap-2">
+    {item.offerprice ? (
+      <>
+        <p className="text-base font-semibold italic">
+          ₹{item.offerprice.toLocaleString()}
+        </p>
+
+        <p className="text-sm text-gray-400 line-through">
+          ₹{item.price.toLocaleString()}
+        </p>
+
+        <span className="text-xs font-bold text-green-600">
+          {Math.round(
+            ((item.price - item.offerprice) / item.price) * 100
+          )}% OFF
+        </span>
+      </>
+    ) : (
+      <p className="text-base font-light italic">
+        ₹{item.price.toLocaleString()}
+      </p>
+    )}
+  </div>
+
+  <div className="h-[1px] flex-1 bg-gray-100" />
+  <ShoppingBag
+    size={14}
+    className="text-gray-300 group-hover:text-black transition-colors"
+  />
+</div>
+
                     </div>
                   </motion.div>
                 ))}

@@ -1,10 +1,13 @@
-
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import axios from "axios";
-import { Package, Truck, CheckCircle, Clock, ChevronRight, MapPin, ExternalLink, ShoppingBag } from "lucide-react";
+import { 
+  Package, CheckCircle, Clock, ChevronRight, 
+  MapPin, ExternalLink, ShoppingBag, Receipt, Search
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import Footer from "./Footer";
 
 const Orders = () => {
   const API = "https://app-product-qh1f.onrender.com/api/v1";
@@ -13,13 +16,20 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const userid = localStorage.getItem("userid");
 
+  const colors = {
+    navy: "#0A2540",
+    royal: "#3B82F6",
+    bg: "#F5F7FA",
+    border: "#E5E7EB",
+  };
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(`${API}/checkout/${userid}`);
         setOrders(res.data.orders);
       } catch (err) {
-        console.log(err.response?.data || err.message);
+        console.log(err.message);
       } finally {
         setLoading(false);
       }
@@ -29,163 +39,145 @@ const Orders = () => {
 
   const getStatusStyle = (status) => {
     switch (status?.toLowerCase()) {
-      case "delivered": return "bg-green-50 text-green-700 border-green-100";
-      case "processing": return "bg-blue-50 text-blue-700 border-blue-100";
-      case "placed": return "bg-amber-50 text-amber-700 border-amber-100";
-      default: return "bg-gray-50 text-gray-600 border-gray-100";
+      case "delivered": return "bg-emerald-50 text-emerald-700 border-emerald-100";
+      case "shipped": return "bg-blue-50 text-blue-700 border-blue-100";
+      default: return "bg-amber-50 text-amber-700 border-amber-100";
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen bg-white">
-        <div className="w-12 h-12 border-4 border-gray-100 border-t-blue-600 rounded-full animate-spin mb-4" />
-        <p className="text-gray-500 font-semibold tracking-wide">Securing your order history...</p>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="h-screen flex items-center justify-center bg-white">
+      <div className="w-10 h-10 border-4 border-gray-100 border-t-blue-600 rounded-full animate-spin" />
+    </div>
+  );
 
   return (
-    <div className="bg-[#FBFCFE] min-h-screen font-sans text-gray-900">
-      <Navbar />
-      
-      <main className="max-w-5xl mt-5 mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }} 
-          animate={{ opacity: 1, x: 0 }}
-          className="mb-10"
-        >
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">Purchase History</h2>
-          <p className="text-gray-500 mt-2 font-medium">Track, manage and download invoices for your curated items.</p>
-        </motion.div>
+    <div className="min-h-screen font-sans flex flex-col" style={{ backgroundColor: colors.bg }}>
+      <div className="sticky top-0 z-50">
+        <Navbar />
+      </div>
 
-        {orders.length === 0 ? (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }} 
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm"
-          >
-            <div className="bg-blue-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <ShoppingBag className="text-blue-950" size={32} />
+      {/* --- LUXURY HERO SECTION (Product Page Style) --- */}
+      <section className="relative h-[400px] bg-blue-950 flex flex-col justify-center items-center px-6 overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center z-10"
+        >
+          <span className="text-[13px] font-bold uppercase tracking-[0.4em] text-blue-400/60 mb-4 block">
+            Customer Dashboard
+          </span>
+          <h1 className="text-5xl md:text-7xl font-light tracking-tighter mb-8 italic text-white">
+            Your Journey
+          </h1>
+          
+          <div className="relative mx-auto group">
+            <div className="sm:w-[450px] px-8 py-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex items-center gap-4">
+               <Package className="text-blue-400" size={20} />
+               <span className="text-white/80 text-sm font-medium tracking-wide">
+                 Managing {orders.length} active and past shipments
+               </span>
             </div>
-            <h3 className="text-xl font-bold">No orders found</h3>
-            <p className="text-gray-500 mt-2 mb-8">It looks like you haven't placed any orders yet.</p>
+          </div>
+        </motion.div>
+        
+        {/* Large Background Text */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] font-black text-white/5 -z-0 select-none">
+          ORDERS
+        </div>
+      </section>
+
+      {/* --- MAIN CONTENT --- */}
+      <main className="max-w-6xl mx-auto px-6 py-16 flex-1 w-full">
+        
+        {orders.length === 0 ? (
+          <div className="text-center py-20 bg-white rounded-[2.5rem] border border-black/20 shadow-sm">
+            <ShoppingBag className="mx-auto mb-4 opacity-10" size={80} />
+            <h3 className="text-xl font-bold">No orders yet</h3>
             <button 
               onClick={() => navigate("/products")}
-              className="bg-blue-950 text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-900 transition-all shadow-lg shadow-blue-600/20"
+              className="mt-6 bg-blue-950 text-white px-8 py-3 rounded-xl font-bold"
             >
-              Start Exploring
+              Start Shopping
             </button>
-          </motion.div>
+          </div>
         ) : (
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-8"
-          >
-            {orders.map((order) => (
+          <div className="space-y-12">
+            {orders.map((order, idx) => (
               <motion.div 
-                key={order._id} 
-                variants={itemVariants}
-                className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300 overflow-hidden"
+                key={order._id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden hover:shadow-xl transition-all duration-500"
               >
-                {/* Header Section */}
-                <div className="bg-blue-950 px-6 py-5 flex flex-wrap justify-between items-center gap-4 border-b border-gray-100">
-                  <div className="flex flex-wrap gap-6 sm:gap-10">
+                {/* Order Header */}
+                <div className="px-8 py-6 bg-gray-200  flex flex-wrap justify-between items-center gap-4">
+                  <div className="flex gap-8 md:gap-12">
                     <div>
-                      <p className="text-sm font-bold text-white  mb-1">Ref Number</p>
-                      <p className="text-xs font-semibold text-white/80 font-mono">#{order._id.slice(-8).toUpperCase()}</p>
+                      <p className="text-[12px] font-semibold text-gray-400 mb-1">Order Ref</p>
+                      <p className="text-sm font-semibold">#{order._id.slice(-8).toUpperCase()}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white  mb-1">Placed On</p>
-                      <p className="text-xs font-semibold text-white/80 font-mono">
-                        {new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                      </p>
+                      <p className="text-[12px] font-semibold text-gray-400 mb-1">Date</p>
+                      <p className="text-sm font-semibold">{new Date(order.createdAt).toLocaleDateString()}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white  mb-1">Total Paid</p>
-                      <p className="text-xs font-semibold text-white/80 font-mono">₹{order.totalamount?.toLocaleString()}</p>
+                      <p className="text-[12px] font-semibold text-gray-400 mb-1">Status</p>
+                      <div className={`mt-1 px-3 py-0.5 rounded-full text-[10px] font-black border ${getStatusStyle(order.status)}`}>
+                        {order.status?.toUpperCase()}
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full border text-[11px] font-bold tracking-wider ${getStatusStyle(order.status)}`}>
-                    {order.status?.toLowerCase() === "delivered" ? <CheckCircle size={14} /> : <Clock size={14} className="animate-pulse" />}
-                    {order.status?.toUpperCase()}
+                  <div className="text-right">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Amount Paid</p>
+                    <p className="text-xl text-[#0A2540]">₹{order.totalamount?.toLocaleString()}</p>
                   </div>
                 </div>
 
-                {/* Product Section */}
-                <div className="p-6 space-y-6">
-                  {order.products.map((item, index) => (
-                    <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 last:pb-0 border-b last:border-0 border-gray-50">
-                      <div className="flex gap-5 items-center">
-                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gray-50 p-2 border border-gray-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
-                          <img 
-                            src={item.product?.images?.[0]?.url || "https://via.placeholder.com/150"} 
-                            alt={item.product?.name}
-                            className="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500"
-                          />
+                {/* Products */}
+                <div className="p-8 divide-y divide-gray-50">
+                  {order.products.map((item, pIdx) => (
+                    <div key={pIdx} className="py-6 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-6">
+                        <div className="w-20 h-20 rounded-2xl bg-gray-50 p-3 border border-black/10 flex items-center justify-center">
+                          <img src={item.product?.images?.[0]?.url} className="max-h-full object-contain mix-blend-multiply" alt="" />
                         </div>
-
-                        <div className="min-w-0">
-                          <h4 className="font-semibold text-gray-900 text-base sm:text-lg truncate">
-                            {item.product?.name}
-                          </h4>
-                          <div className="flex items-center gap-3 mt-2">
-                            <span className="text-[11px] font-bold text-blue-950 bg-blue-50 px-2 py-0.5 rounded uppercase tracking-tighter">
-                              {item.product?.category}
-                            </span>
-                            <span className="text-xs font-semibold text-gray-400">Quantity: {item.quantity}</span>
-                          </div>
-                          <p className="text-sm font-semibold text-gray-900 mt-2">₹{item.price?.toLocaleString()}</p>
+                        <div>
+                          <h4 className="font-bold text-gray-900">{item.product?.name}</h4>
+                          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">{item.product?.category} • Qty: {item.quantity}</p>
                         </div>
                       </div>
-
-                      <button 
-                        onClick={() => navigate(`/products`)}
-                        className="flex items-center justify-center gap-2 px-5 py-2.5 border-2 border-gray-50 rounded-xl text-xs font-bold text-gray-600 hover:border-blue-600 hover:text-blue-600 transition-all active:scale-95"
-                      >
-                        Buy Again <ExternalLink size={14} />
+                      <button onClick={() => navigate('/products')} className="p-3 rounded-xl border border-gray-100 hover:bg-blue-50 hover:text-blue-600 transition-all">
+                        <ExternalLink size={18} />
                       </button>
                     </div>
                   ))}
                 </div>
 
-                {/* Tracking/Address Footer */}
-                <div className="bg-gray-300/50 px-6 py-5 flex flex-col md:flex-row justify-between items-center border-t border-gray-100 gap-6">
-                  <div className="flex items-start gap-4 w-full">
-                    <div className="p-2 bg-white rounded-lg shadow-sm border border-gray-100 flex-shrink-0">
-                      <MapPin className="text-blue-600" size={18} />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Delivery Destination</p>
-                      <p className="text-sm text-gray-600 font-medium truncate">
-                        {order.shippingDetails?.firstname} {order.shippingDetails?.lastname} • {order.shippingDetails?.street}, {order.shippingDetails?.city}
-                      </p>
-                    </div>
+                {/* Footer */}
+                <div className="px-8 py-6 bg-blue-950 flex flex-col md:flex-row justify-between items-center gap-6">
+                  <div className="flex items-center gap-4 text-white/80">
+                    <MapPin size={18} className="text-blue-400" />
+                    <p className="text-xs font-medium">
+                      Shipping to: <span className="text-white font-bold">{order.shippingDetails?.city}, {order.shippingDetails?.state}</span>
+                    </p>
                   </div>
-                  
-                  <button className="w-full md:w-auto px-8 py-3 bg-gray-900 text-white text-xs font-bold rounded-xl hover:bg-blue-600 transition-all flex items-center justify-center gap-2 group shadow-lg shadow-gray-900/10">
-                    Track Shipment
-                    <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
+                  <div className="flex gap-3 w-full md:w-auto">
+                    <button className="flex-1 md:flex-none px-6 py-3 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+                      <Receipt size={16} /> INVOICE
+                    </button>
+                    <button className="flex-1 md:flex-none px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+                      TRACKING <ChevronRight size={16} />
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 };

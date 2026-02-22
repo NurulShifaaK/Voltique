@@ -10,7 +10,8 @@ import {
 } from 'lucide-react';
 
 const ProductManagement = () => {
-  const API = "https://app-product-qh1f.onrender.com/api/v1";
+const API = "https://app-product-qh1f.onrender.com/api/v1";
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -21,7 +22,7 @@ const ProductManagement = () => {
   const [actionLoading, setActionLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "", description: "", price: "", 
+    name: "", description: "", price: "", offerprice:"",
     category: "", categoryType: "", stock: 1,
     imageUrl: ""
   });
@@ -30,6 +31,7 @@ const ProductManagement = () => {
     try {
       const res = await axios.get(`${API}/products`);
       setProducts(res.data.products);
+      console.log(res)
     } catch (error) {
       console.error("Fetch Error:", error);
     } finally {
@@ -40,7 +42,7 @@ const ProductManagement = () => {
   useEffect(() => { fetchData(); }, []);
 
   const resetForm = () => {
-    setFormData({ name: "", description: "", price: "", category: "", categoryType: "", stock: 1, imageUrl: "" });
+    setFormData({ name: "", description: "", price: "",offerprice: "", category: "", categoryType: "", stock: 1, imageUrl: "" });
     setEditId(null);
     setIsModalOpen(false);
   };
@@ -52,6 +54,7 @@ const ProductManagement = () => {
       name: product.name,
       description: product.description,
       price: product.price,
+      offerprice:product.offerprice,
       category: product.category,
       categoryType: product.categoryType,
       stock: product.stock,
@@ -66,6 +69,9 @@ const ProductManagement = () => {
     try {
       const submissionData = {
         ...formData,
+         price: Number(formData.price),
+  stock: Number(formData.stock),
+  offerprice: formData.offerprice ? Number(formData.offerprice) : null,
         images: [{ public_id: `img_${Date.now()}`, url: formData.imageUrl }]
       };
 
@@ -168,7 +174,24 @@ const ProductManagement = () => {
                 <div className="flex justify-between items-end">
                   <div>
                     <p className="text-[10px] text-slate-400 font-bold uppercase">Stock: <span className={product.stock < 10 ? 'text-rose-500' : 'text-emerald-500'}>{product.stock}</span></p>
-                    <p className="text-lg font-bold text-blue-950 mt-1">₹{product.price?.toLocaleString()}</p>
+                    {/* <p className="text-lg font-bold text-blue-950 mt-1">₹{product.price?.toLocaleString()}</p> */}
+                    <div className="flex items-center gap-2 mt-1">
+  {product.offerprice && (
+    <>
+      <p className="text-sm text-slate-400 line-through">
+        ₹{product.price?.toLocaleString()}
+      </p>
+      <p className="text-lg font-bold text-blue-950">
+        ₹{product.offerprice?.toLocaleString()}
+      </p>
+    </>
+  )}
+  {!product.offerprice && (
+    <p className="text-lg font-bold text-blue-950">
+      ₹{product.price?.toLocaleString()}
+    </p>
+  )}
+</div>
                   </div>
                   <div className="flex gap-1">
                     <button 
@@ -210,13 +233,14 @@ const ProductManagement = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase">Price (₹)</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase">original Price (₹)</label>
                     <input required type="number" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none" placeholder="0.00"/>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase">Current Stock</label>
-                    <input required type="number" value={formData.stock} onChange={(e) => setFormData({...formData, stock: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none"/>
+                   <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase">Offer Price (₹)</label>
+                    <input required type="number" value={formData.offerprice} onChange={(e) => setFormData({...formData, offerprice: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none" placeholder="0.00"/>
                   </div>
+                 
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -230,11 +254,17 @@ const ProductManagement = () => {
                   </div>
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-1 grid grid-cols-2 gap-4 place-content-center">
+                      <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-blue-600 flex items-center gap-1">
                     <ImageIcon size={12}/> Image URL
                   </label>
                   <input required value={formData.imageUrl} onChange={(e) => setFormData({...formData, imageUrl: e.target.value})} className="w-full p-3 bg-blue-50/50 border border-blue-100 rounded-xl text-sm outline-none" placeholder="https://cloud.com/image.jpg"/>
+                  </div>
+                   <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase">Current Stock</label>
+                    <input required type="number" value={formData.stock} onChange={(e) => setFormData({...formData, stock: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none"/>
+                  </div>
                 </div>
 
                 <div className="space-y-1">

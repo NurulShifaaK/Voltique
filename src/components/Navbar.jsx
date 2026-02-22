@@ -90,16 +90,16 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-full w-full max-w-[300px] bg-white z-[120] p-8 shadow-2xl flex flex-col"
+              className="fixed top-0 right-0 h-full w-full max-w-[300px] bg-white z-[120] shadow-2xl flex flex-col"
             >
-              <div className="flex justify-between items-center mb-16">
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#D4AF37]">Menu</span>
-                <button onClick={() => setOpen(false)} className="p-2 hover:bg-gray-50 rounded-full transition-colors">
+              <div className="flex justify-between items-center bg-blue-950 px-8 py-3 ">
+                <span className="font-light uppercase text-lg text-white">Menu</span>
+                <button onClick={() => setOpen(false)} className="p-2  text-white rounded-full transition-colors">
                   <X size={24} />
                 </button>
               </div>
 
-              <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-8 p-5">
                 {navLinks.map((link, i) => (
                   <motion.div
                     initial={{ opacity: 0, x: 20 }}
@@ -110,7 +110,7 @@ const Navbar = () => {
                     <Link 
                       to={link.path} 
                       onClick={() => setOpen(false)}
-                      className="text-2xl font-light italic tracking-tight hover:text-[#D4AF37] transition-colors"
+                      className="text-2xl font-light italic tracking-tight hover:text-blue-950 transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -119,11 +119,11 @@ const Navbar = () => {
               </div>
 
               <div className="mt-auto border-t border-gray-100 pt-8 flex items-center justify-between">
-                <Link to="/login" className="text-xs font-bold flex items-center gap-2 text-gray-400 hover:text-black transition-colors">
+                <Link to="/login" className=" font-semibold p-7 flex items-center gap-2 text-blue-950 hover:text-black transition-colors">
                   <LogOut size={16} /> Logout
                 </Link>
                 <div className="flex gap-4">
-                    <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
+                    
                 </div>
               </div>
             </motion.div>
