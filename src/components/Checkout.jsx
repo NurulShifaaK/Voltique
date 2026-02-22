@@ -18,8 +18,8 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Checkout = () => {
-  //  const API = "https://app-product-qh1f.onrender.com/api/v1";
-  const API = "http://localhost:3000/api/v1";
+  const API = "https://app-product-qh1f.onrender.com/api/v1";
+  // const API = "http://localhost:3000/api/v1";
   const navigate = useNavigate();
   const userid = localStorage.getItem("userid");
 
