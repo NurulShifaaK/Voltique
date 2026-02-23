@@ -37,7 +37,7 @@ const Singelproduct = () => {
         navigate("/login");
         return;
       }
-      
+
       await axios.post(`${API}/addtocart`, {
         sessionId: userid,
         productId: id,
@@ -50,6 +50,26 @@ const Singelproduct = () => {
       console.log(err);
     }
   };
+
+  //shareapi
+  const handleShare = async () => {
+  try {
+    const shareData = {
+      title: product?.name,
+      text: `Check out this product: ${product?.name} - ₹${product?.price}`,
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      alert("Product link copied to clipboard!");
+    }
+  } catch (err) {
+    console.log("Share failed:", err);
+  }
+};
 
   // Professional Content for Tabs
   const tabContent = {
@@ -242,12 +262,11 @@ const Singelproduct = () => {
                 >
                   <ShoppingBag size={20} /> Add to Bag
                 </button>
-                {/* <button 
-                  onClick={() => navigate("/checkout")}
-                  className="flex items-center justify-center gap-3 border-2 border-gray-900 py-5 rounded-2xl font-bold hover:bg-gray-900 hover:text-white transition-all active:scale-[0.98]"
-                >
-                  <CreditCard size={20} /> Secure Checkout
-                </button> */}
+                <button 
+                  onClick={handleShare}
+                  className="flex items-center justify-center gap-3 border-2 border-gray-900/40 py-5 rounded-2xl font-bold hover:bg-gray-900 hover:text-white transition-all active:scale-[0.98]">
+                  <CreditCard size={20} /> Share
+                </button>
               </motion.div>
 
               {/* Professional Trust Badges */}

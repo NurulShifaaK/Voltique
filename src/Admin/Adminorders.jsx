@@ -57,8 +57,7 @@ const AdminOrders = () => {
 
   const updateStatus = async (orderId, newStatus) => {
     try {
-      await axios.put(`${API}/checkout/${orderId}`, { status: newStatus });
-      // Refresh data to reflect status change across the group
+      await axios.put(`${API}/checkout/status/${orderId}`, { status: newStatus });
       fetchAdminOrders();
     } catch (err) {
       console.error(orderId, err);

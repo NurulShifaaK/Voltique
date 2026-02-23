@@ -7,10 +7,26 @@ import Footer from "./Footer";
  import mac from "../assets/lap.jpeg";
  import watch from "../assets/watch.jpeg";
 import head from "../assets/headphone.jpeg";
+import axios from "axios";
 
 const Home = () => {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const API = "https://app-product-qh1f.onrender.com/api/v1";
+  const [categories, setCategories] = useState([]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(`${API}/category`);
+      console.log(res.data.allcategory);
+     setCategories(res.data.allcategory || []);
+   
+    } catch (err) {
+      console.error("Fetch Error:", err);
+    } 
+  };
+
+  useEffect(() => { fetchCategories(); }, []);
 
   const heroSlides = [
     {
@@ -138,7 +154,7 @@ const Home = () => {
         </div>
 
         {/* --- Category Grid --- */}
-        <section >
+        {/* <section >
           <motion.h2 initial="hidden" whileInView="visible" variants={fadeUp} className="sm:text-4xl text-2xl font-bold text-center mb-8">
             Shop by Category
           </motion.h2>
@@ -162,7 +178,67 @@ const Home = () => {
               </motion.div>
             ))}
           </div>
-        </section>
+        </section> */}
+
+      
+
+        <section className="py-2 px-6">
+      <div className="max-w-[1400px] mx-auto">
+        {/* Section Header */}
+        <div className="flex justify-center items-center mb-12">
+          <div>
+            <h2 className="text-4xl font-light text-blue-950 mt-2">
+              Shop by <span className="font-bold">Category</span>
+            </h2>
+          </div>
+          
+        </div>
+
+        {/* Categories Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8">
+          {categories.map((item, index) => {
+            return (
+              <motion.div
+                key={item._id || item.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -10 }}
+                className="group cursor-pointer"
+              >
+                <div
+                onClick={()=>handlecategory(item.name)}
+                 className="relative aspect-square p-5 overflow-hidden bg-slate-50 border border-slate-100 mb-4 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-900/10">
+                  {/* Image with Zoom Effect */}
+                  <img 
+
+                    className="w-[300px] h-[300px]  object-cover transition-transform duration-700 group-hover:scale-110" 
+                    src={item.image?.url} 
+                    alt={item.name}
+                  />
+                 
+                 
+                  {/* Glassmorphism Overlay (Optional) */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+
+              
+                {/* Label Design */}
+                <div className="text-center">
+                  <p className="text-sm font-bold text-blue-950 capitalize tracking-tight group-hover:text-blue-600 transition-colors">
+                    {item.name}
+                  </p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase mt-1 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                    Explore Items
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
 
 
               <section className="bg-blue-950 mt-20 py-10 rounded-xl relative overflow-hidden">

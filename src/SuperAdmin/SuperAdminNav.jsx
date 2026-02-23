@@ -12,6 +12,7 @@ const SuperAdminNav = () => {
     { name: "Dashboard", path: "/superadmindashboard", icon: LayoutDashboard },
     { name: "Products", path: "/productupload", icon: PackagePlus },
     { name: "Users", path: "/superadminusermanagement", icon: Users },
+    { name:"Category" ,path:"/categoryupload", icon: PackagePlus},
   ];
 
   return (
