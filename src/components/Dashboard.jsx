@@ -17,6 +17,7 @@ import Superdashboard from '../SuperAdmin/Superdashboard';
 import Productupload from '../SuperAdmin/Productupload';
 import SuperAdminUser from '../SuperAdmin/SuperAdminUser';
 import Categoryupload from '../SuperAdmin/Categoryupload';
+import Bannerupload from '../SuperAdmin/Bannerupload';
 
 
 const Dashboard = () => {
@@ -40,6 +41,7 @@ const Dashboard = () => {
   <Route path="/productupload" element={<Productupload/>}/>
   <Route path="/superadminusermanagement" element={<SuperAdminUser/>}/>
   <Route path="/categoryupload" element={<Categoryupload/>}/>
+  <Route path="/bannerupload" element={<Bannerupload/>}/>
    </Routes>
   )
 }

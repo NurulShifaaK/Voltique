@@ -50,7 +50,7 @@ const Category = () => {
       <Navbar />
 
       {/* --- LUXURY ECHO HEADER --- */}
-      <section className="relative h-[350px] bg-blue-950 flex flex-col justify-center items-center px-6 overflow-hidden">
+      <section className="relative h-[350px] bg-[#8E7DBE] flex flex-col justify-center items-center px-6 overflow-hidden">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ const Category = () => {
         >
           <button 
             onClick={() => navigate("/products")}
-            className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-400 mb-6 flex items-center justify-center gap-2 mx-auto hover:text-white transition-all"
+            className="text-[10px] font-black uppercase tracking-[0.4em] text-white mb-6 flex items-center justify-center gap-2 mx-auto hover:text-white transition-all"
           >
             <ArrowLeft size={14} /> All Collections
           </button>
@@ -80,7 +80,7 @@ const Category = () => {
         {/* Statistics / Filter Bar */}
         <div className="bg-white border border-gray-100 rounded-3xl p-6 mb-12 shadow-xl shadow-blue-900/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4">
-             <div className="h-10 w-1 bg-blue-600 rounded-full" />
+             <div className="h-10 w-1 bg-white rounded-full" />
              <div>
                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Available Items</p>
                <p className="text-lg font-bold text-[#0A2540]">{products.length} Premium Products</p>
@@ -90,6 +90,7 @@ const Category = () => {
             <span className="px-4 py-2 bg-gray-50 rounded-xl text-xs font-bold text-gray-500">Sorted by: Newest</span>
           </div>
         </div>
+      
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -141,6 +142,7 @@ const Category = () => {
                     </div>
                   )}
                 </div>
+               
 
                 {/* Product Info */}
                 <div className="px-2 text-center sm:text-left">
@@ -163,7 +165,7 @@ const Category = () => {
                   
                   <button 
                     onClick={() => navigate(`/singleproduct/${item._id}`)}
-                    className="w-full py-4 text-white border-2 bg-blue-950 border-[#0A2540]/5 rounded-2xl text-[11px] font-black text-[#0A2540] uppercase tracking-[0.2em] hover:bg-[#0A2540] hover:text-white hover:border-[#0A2540] transition-all duration-300 flex items-center justify-center gap-2 group/btn"
+                    className="w-full py-4 text-white border-2 bg-[#8E7DBE] border-[#0A2540]/5 rounded-2xl text-[11px] font-black text-[#0A2540] uppercase tracking-[0.2em]  hover:text-white hover:border-[#0A2540] transition-all duration-300 flex items-center justify-center gap-2 group/btn"
                   >
                     View Experience <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                   </button>

@@ -45,7 +45,7 @@ const Product = () => {
       </div>
 
       {/* --- LUXURY HERO SECTION --- */}
-      <section className="relative h-[400px]  bg-blue-950 flex flex-col justify-center items-center px-6 overflow-hidden">
+      <section className="relative h-[400px]  bg-[#8E7DBE] flex flex-col justify-center items-center px-6 overflow-hidden">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -74,7 +74,7 @@ const Product = () => {
 
       {/* --- MINIMALIST FILTERS --- */}
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="flex flex-col md:flex-row justify-between items-center border-b border-gray-100 pb-2 gap-6">
+        {/* <div className="flex flex-col md:flex-row justify-between items-center border-b border-gray-100 pb-2 gap-6">
           <div className="flex gap-8 overflow-x-auto pb-2 w-full md:w-auto no-scrollbar">
             {categories.map((cat) => (
               <button
@@ -98,7 +98,7 @@ const Product = () => {
           >
             <RefreshCcwDotIcon size={14} /> Reset Filters
           </button>
-        </div>
+        </div> */}
 
         {/* --- PRODUCT GRID --- */}
         <div className="mt-12">
@@ -137,7 +137,7 @@ const Product = () => {
                         <Heart size={16} />
                       </button>
                       
-                      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-blue-950 text-white backdrop-blur-sm">
+                      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-[#8E7DBE] text-white backdrop-blur-sm">
                          <span className="text-[13px] font-bold uppercase flex items-center justify-between">
                             Quick View <ArrowRight size={12} />
                          </span>
@@ -198,7 +198,7 @@ const Product = () => {
       </div>
 
       {/* --- LOOPING TESTIMONIALS --- */}
-      <section className="bg-blue-950 py-12 overflow-hidden mt-10">
+      <section className="bg-[#8E7DBE] py-12 overflow-hidden mt-10">
         <div className="flex whitespace-nowrap animate-marquee">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="flex items-center gap-12 mx-12">

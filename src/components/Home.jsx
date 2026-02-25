@@ -1,287 +1,208 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
- import iphone from "../assets/phone.jpeg";
- import mac from "../assets/lap.jpeg";
- import watch from "../assets/watch.jpeg";
-import head from "../assets/headphone.jpeg";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const API = "https://app-product-qh1f.onrender.com/api/v1";
+    const API = "https://app-product-qh1f.onrender.com/api/v1";
+  
   const [categories, setCategories] = useState([]);
+  const [testimonal, settestimonal] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const primaryColor = "#8E7DBE";
 
   const fetchCategories = async () => {
     try {
       const res = await axios.get(`${API}/category`);
-      console.log(res.data.allcategory);
-     setCategories(res.data.allcategory || []);
-   
+      setCategories(res.data.allcategory || []);
     } catch (err) {
-      console.error("Fetch Error:", err);
-    } 
+      toast.error("Fetch Error");
+    }
   };
 
-  useEffect(() => { fetchCategories(); }, []);
+  const handlecategory = (categoryName) => {
+    // Navigates to /category and passes the name via state
+    navigate("/category", { state: { category: categoryName } });
+  };
 
-  const heroSlides = [
-    {
-      title: "Premium Gadgets",
-      subtitle: "in Voltique",
-      desc: "Shop the latest electronics crafted for speed, style, and seamless performance.",
-      img: head,
-    //   color: "from-blue-600 to-cyan-400"
-    },
-    {
-      title: "Precision Time",
-      subtitle: "Watch Series 11",
-      desc: "More than just a watch. A complete health and performance tracker for your wrist.",
-      img: watch,
-      //color: "from-orange-500 to-red-600"
-    },
-    {
-      title: "Powerful Computing",
-      subtitle: "MacBook Pro",
-      desc: "Built for creators, engineered for power. Unleash your full potential.",
-      img: mac,
-      //color: "from-gray-700 to-black"
+  const fetchallbanner = async () => {
+    try {
+      const res = await axios.get(`${API}/bannerupload`);
+      settestimonal(res.data.banner || []);
+    } catch (err) {
+      console.error(err);
     }
-  ];
+  };
 
-  // Auto-slide Hero Section
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    fetchCategories();
+    fetchallbanner();
   }, []);
 
-  const handlecategory = (category) => {
-    navigate("/category", { state: { category } });
-  };
+  // --- Auto-Slide Logic ---
+  useEffect(() => {
+    if (testimonal.length === 0) return;
 
-  const fadeUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  };
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => {
+        // Logic for infinite loop
+        // In Desktop (3 items), we stop at length - 3
+        // In Mobile (1 item), we stop at length - 1
+        const isMobile = window.innerWidth < 768;
+        const maxIndex = isMobile ? testimonal.length - 1 : testimonal.length - 3;
+        return prev >= maxIndex ? 0 : prev + 1;
+      });
+    }, 3000); // 3 Seconds pause
+
+    return () => clearInterval(timer);
+  }, [testimonal]);
 
   return (
-    <div className=" min-h-screen flex flex-col overflow-x-hidden selection:bg-black selection:text-white">
+    <div className="min-h-screen flex flex-col overflow-x-hidden selection:bg-[#8E7DBE] selection:text-white">
       <Navbar />
 
-      <main className="max-w-7xl bg-gray-100 mx-auto px-4 md:px-8 py-3 flex-1 w-full mt-16">
+      <div>
+          <img className="w-full h-[400px] object-cover" src="https://i.pinimg.com/1200x/0f/ac/a0/0faca0106acafa81e3a9206701febbc4.jpg"/>
+      </div>
+
+      <main className="max-w-7xl bg-gray-50 mx-auto px-4 md:px-8 py-3 flex-1 w-full mt-5">
         
-        {/* --- Hero Section with Auto-Slider --- */}
-        <div className="relative h-[410px] md:h-[500px] w-full overflow-hidden rounded-3xl shadow-2xl border border-gray-100 bg-blue-950">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentSlide}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
-              className="absolute inset-0 flex flex-col md:flex-row items-center justify-between p-6 md:p-16"
-            >
-              <div className="md:w-1/2 flex flex-col gap-2 sm:gap-5 text-center md:text-left z-10">
-                <motion.h1 
-                  className="text-2xl md:text-6xl font-bold tracking-tighter text-white/50"
+        {/* --- Multi-Banner Slider Section --- */}
+        <div className="w-full py-10 overflow-hidden relative">
+          <motion.div 
+            className="flex gap-6"
+            animate={{ 
+              // Moves the track based on current index
+              // Mobile: 100% width, Desktop: ~33.33% width
+              x: `calc(-${currentIndex * (window.innerWidth < 768 ? 100 : 33.33)}% - ${currentIndex * 1.5}rem)` 
+            }}
+            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+          >
+            {testimonal.map((item) => {
+              const hasBgImg = item.bgimg && item.bgimg[0] && item.bgimg[0].url;
+              return (
+                <div
+                  key={item._id}
+                  className="relative flex-shrink-0 w-full md:w-[calc(33.33%-1rem)] h-[220px] overflow-hidden group rounded-[2rem] shadow-lg transition-all duration-500 hover:shadow-2xl"
+                  style={{
+                    backgroundImage: hasBgImg ? `url(${item.bgimg[0].url})` : 'none',
+                    backgroundColor: item.bgcolor ? `#${item.bgcolor.replace('#', '')}` : primaryColor,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
                 >
-                  {heroSlides[currentSlide].title} <br /> 
-                  <span className={`${heroSlides[currentSlide].color}`}>
-                    {heroSlides[currentSlide].subtitle}
-                  </span>
-                </motion.h1>
-                <p className="sm:text-lg text-sm text-white/70 sm:leading-relaxed max-w-md mx-auto md:mx-0">
-                  {heroSlides[currentSlide].desc}
-                </p>
-                <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: "0px 10px 30px rgba(0,0,0,0.1)" }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate("/products")}
-                  className="bg-white text-blue-950 text-sm sm:text-lg font-bold px-6 sm:px-8 sm:py-4 py-1 rounded-full w-fit mx-auto md:mx-0"
-                >
-                  Explore Products
-                </motion.button>
-              </div>
+                  {hasBgImg && <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />}
 
-              <div className="md:w-1/2 flex justify-center md:mt-0 relative">
-                <div className={`absolute inset-0 bg-gradient-to-r ${heroSlides[currentSlide].color} blur-[120px] opacity-20 rounded-full animate-pulse`}></div>
-                <motion.img
-                  src={heroSlides[currentSlide].img}
-                  alt="Slide"
-                  className="w-full max-w-sm h-40 md:h-96 object-contain z-10"
-                />
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                  {/* Text */}
+                  <div className="relative z-10 w-[65%] p-6 h-full flex flex-col justify-center text-white">
+                    <h3 className="text-xl font-black italic tracking-tighter leading-none mb-1 uppercase">
+                      {item.imgtext || "Exclusive"}
+                    </h3>
+                    <p className="text-white/80 text-[10px] font-bold uppercase tracking-widest">
+                      {item.imgsubtext || "Limited"}
+                    </p>
+                    <button className="mt-4 w-fit px-4 py-1.5 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-[9px] font-bold uppercase hover:bg-white hover:text-black transition-all">
+                      View
+                    </button>
+                  </div>
 
-          {/* Slider Dots */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-            {heroSlides.map((_, idx) => (
+                  {/* Floating Image */}
+                  <div className="absolute right-[-10px] bottom-[-10px] w-1/2 h-full flex items-center justify-center">
+                    {item.floatimg?.[0] && (
+                      <img
+                        src={item.floatimg[0].url}
+                        alt="promo"
+                        className="w-full h-auto object-contain drop-shadow-xl transform group-hover:scale-110 transition-transform duration-500"
+                      />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </motion.div>
+
+          {/* Indicators */}
+          <div className="flex justify-center mt-6 gap-2">
+            {testimonal.map((_, idx) => (
               <button
                 key={idx}
-                onClick={() => setCurrentSlide(idx)}
-                className={`h-2 transition-all duration-300 rounded-full ${currentSlide === idx ? "w-8 bg-black" : "w-2 bg-gray-300"}`}
+                onClick={() => setCurrentIndex(idx)}
+                className={`h-1 rounded-full transition-all duration-300 ${
+                  idx === currentIndex ? "w-8 bg-[#8E7DBE]" : "w-2 bg-gray-300"
+                }`}
               />
             ))}
           </div>
         </div>
 
         {/* --- Infinite Brand Ticker --- */}
-        <div className="relative sm:py-20 py-5 overflow-hidden">
+        <div className="relative sm:py-10 py-5 overflow-hidden">
           <motion.div
             className="flex whitespace-nowrap gap-10 items-center"
             animate={{ x: [0, -1500] }}
             transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
           >
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+            {[1, 2, 3, 4, 5, 6].map((item) => (
               <div key={item} className="flex items-center sm:gap-6 gap-4 group">
-                <span className="sm:text-7xl text-xl font-black text-blue-800 group-hover:text-blue-500 transition-all duration-500 outline-text">
-                  0{item}
-                </span>
-                <span className="sm:text-3xl text-xl font-bold text-blue-950/50 uppercase tracking-widest group-hover:text-black transition-all">
-                  SDL Creative groups
+                <span className="sm:text-7xl text-xl font-black opacity-30" style={{ color: primaryColor }}>0{item}</span>
+                <span className="sm:text-3xl text-xl font-bold text-gray-400 uppercase tracking-widest group-hover:text-[#8E7DBE] transition-all">
+                  AL-VOGUE BOUTIQUE
                 </span>
               </div>
             ))}
           </motion.div>
-          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-gray-70 to-transparent z-10"></div>
-          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-gray-70 to-transparent z-10"></div>
         </div>
 
-        {/* --- Category Grid --- */}
-        {/* <section >
-          <motion.h2 initial="hidden" whileInView="visible" variants={fadeUp} className="sm:text-4xl text-2xl font-bold text-center mb-8">
-            Shop by Category
-          </motion.h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 sm:gap-8 gap-2">
-            {[
-              { img: "https://i.pinimg.com/736x/20/78/aa/2078aa60db3cb611f884774708b1a3d6.jpg", cat: "iPhone", color: "hover:border-blue-500" },
-              { img: "https://i.pinimg.com/1200x/ac/c7/90/acc7905efc6a54fe101a3d1483c7dcd1.jpg", cat: "Mac", color: "hover:border-purple-500" },
-              { img: "https://i.pinimg.com/736x/4a/11/50/4a1150f2b62dbab4e4ebe3506a1e48d5.jpg", cat: "Watch", color: "hover:border-orange-500" },
-              { img: "https://i.pinimg.com/1200x/c9/95/38/c99538e32552c4c6bfcb732f1bf4e838.jpg", cat: "Headphones", color: "hover:border-pink-500" }
-            ].map(({ img, cat, color }) => (
+        {/* --- Collections Section --- */}
+        <section className="py-10 flex flex-col items-center">
+          <div className="text-center mb-12">
+            <span className="text-[10px] uppercase font-light text-gray-400 tracking-[0.5em]">Curated Selection</span>
+            <h2 className="text-4xl md:text-5xl font-serif text-gray-800 italic font-light tracking-tight mt-2">
+              The <span style={{ color: primaryColor }}>Collections</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-8 w-full">
+            {categories.map((item, index) => (
               <motion.div
-                key={cat}
-                onClick={() => handlecategory(cat)}
-                whileHover={{ y: -15, scale: 1.02 }}
-                className={`group cursor-pointer bg-white sm:p-8 p-4 rounded-2xl border-2 border-transparent shadow-xl transition-all duration-500 flex flex-col items-center`}
+                key={item._id || index}
+                whileHover={{ y: -10 }}
+                className="group cursor-pointer flex flex-col items-center"
+                onClick={() => handlecategory(item.name)}
               >
-                <div className="w-full flex items-center justify-center mb-6">
-                  <img src={img} alt={cat} className="w-full h-[200px] object-contain group-hover:rotate-6 transition-transform duration-500" />
+                <div className="relative overflow-hidden w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-full shadow-md group-hover:shadow-xl transition-all">
+                  <img src={item.image?.url} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+                    <p className="text-white font-bold text-[10px] uppercase">{item.name}</p>
+                  </div>
                 </div>
-                <h3 className="sm:text-xl font-bold text-gray-800">{cat}</h3>
               </motion.div>
             ))}
           </div>
-        </section> */}
+        </section>
 
-      
-
-        <section className="py-2 px-6">
-      <div className="max-w-[1400px] mx-auto">
-        {/* Section Header */}
-        <div className="flex justify-center items-center mb-12">
-          <div>
-            <h2 className="text-4xl font-light text-blue-950 mt-2">
-              Shop by <span className="font-bold">Category</span>
-            </h2>
-          </div>
-          
-        </div>
-
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8">
-          {categories.map((item, index) => {
-            return (
-              <motion.div
-                key={item._id || item.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="group cursor-pointer"
-              >
-                <div
-                onClick={()=>handlecategory(item.name)}
-                 className="relative aspect-square p-5 overflow-hidden bg-slate-50 border border-slate-100 mb-4 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-900/10">
-                  {/* Image with Zoom Effect */}
-                  <img 
-
-                    className="w-[300px] h-[300px]  object-cover transition-transform duration-700 group-hover:scale-110" 
-                    src={item.image?.url} 
-                    alt={item.name}
-                  />
-                 
-                 
-                  {/* Glassmorphism Overlay (Optional) */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-blue-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-
-              
-                {/* Label Design */}
-                <div className="text-center">
-                  <p className="text-sm font-bold text-blue-950 capitalize tracking-tight group-hover:text-blue-600 transition-colors">
-                    {item.name}
-                  </p>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase mt-1 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                    Explore Items
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-
-
-              <section className="bg-blue-950 mt-20 py-10 rounded-xl relative overflow-hidden">
-          {/* Decorative background text */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[20vw] font-black text-white/5 whitespace-nowrap select-none">REVIEWS</div>
-          
+        {/* --- Testimonials --- */}
+        <section className="mt-20 py-16 rounded-[3rem] relative overflow-hidden" style={{ backgroundColor: primaryColor }}>
           <div className="max-w-7xl mx-auto px-6 relative z-10">
-            <div className="text-center mb-20">
-              <span className="text-blue-400 text-xs font-black uppercase tracking-widest mb-4 block">Testimonials</span>
-              <h2 className="text-4xl md:text-5xl font-light text-white italic tracking-tight">Voices of SDL</h2>
-            </div>
-
-            <div className="relative flex overflow-hidden py-10">
+            <h2 className="text-4xl text-center font-light text-white italic mb-12">Elegance Shared</h2>
+            <div className="flex overflow-hidden">
               <motion.div 
                 className="flex gap-8"
-                animate={{ x: [0, -2500] }}
-                transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
+                animate={{ x: [0, -1000] }}
+                transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
               >
-                {[...Array(2)].map((_, i) => (
-                  <div key={i} className="flex gap-8">
-                    {[
-                      { name: "Aarav Mehta", role: "Tech Enthusiast", review: "Absolutely premium quality! The performance and build feel next level." },
-                      { name: "Sneha Kapoor", role: "Creative Designer", review: "Super smooth experience. The gadgets look stunning and work flawlessly." },
-                      { name: "Rahul Sharma", role: "Tech Entrepreneur", review: "Fast shipping and top-tier electronics. My go-to store for tech upgrades." },
-                      { name: "Esha Verma", role: "Travel Vlogger", review: "The camera quality on the new iPhone is insane. Voltique is the best!" }
-                    ].map((item, idx) => (
-                      <div key={idx} className="bg-white/5 backdrop-blur-xl p-10 rounded-[3rem] border border-white/10 w-[350px] md:w-[450px] group hover:bg-white transition-all duration-500">
-                        {/* <Quote className="text-blue-500 mb-6 group-hover:text-[#0A2540]" size={32} /> */}
-                        <div className="flex gap-1 mb-6 text-yellow-400">
-                          {/* {[...Array(5)].map((_, s) => <Star key={s} size={14} fill="currentColor" />)} */}
-                        </div>
-                        <p className="text-blue-100 group-hover:text-gray-600 text-lg md:text-xl font-medium leading-relaxed mb-10 italic">"{item.review}"</p>
-                        <div className="flex items-center gap-4">
-                          <div className="h-14 w-14 rounded-2xl bg-blue-500 flex items-center justify-center text-white font-black text-xl shadow-lg">
-                            {item.name[0]}
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-white group-hover:text-[#0A2540]">{item.name}</h4>
-                            <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">{item.role}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="bg-white/10 backdrop-blur-md p-8 rounded-[2rem] border border-white/20 min-w-[300px]">
+                    <p className="text-white italic mb-6">"The fabric quality is unmatched. Beautifully crafted."</p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold">F</div>
+                      <span className="text-white font-bold text-sm">Customer {i}</span>
+                    </div>
                   </div>
                 ))}
               </motion.div>
@@ -289,11 +210,9 @@ const Home = () => {
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   );
 };
 
 export default Home;
-

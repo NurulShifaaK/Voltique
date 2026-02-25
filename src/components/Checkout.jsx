@@ -10,7 +10,8 @@ import {
   Lock, 
   CreditCard, 
   Wallet,
-  ChevronLeft
+  ChevronLeft,
+  MessageCircleMore
 } from "lucide-react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -29,17 +30,19 @@ const Checkout = () => {
     street: "", city: "", state: "", pincode: "", phone: ""
   });
 
+    const subtotal = checkcart.reduce((acc, item) => acc + (item.product.offerprice * item.quantity), 0);
+    const total = subtotal ; 
   // Razorpay Payment Logic (Functionality preserved)
   const handlepayment = async () => {
-    const subtotal = checkcart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
-    const total = subtotal + (subtotal * 0.05); // 5% Tax
+    
+     const total = subtotal ; 
     try {
       const { data } = await axios.post(`${API}/createorder`, {
-        amount: total
+        amount:subtotal
       });
       const options = {
         key: data.key,
-        amount: total * 100,
+        amount: total,
         currency: "INR",
         name: "SDL Creative Groups",
         description: "Order Payment",
@@ -66,6 +69,7 @@ const Checkout = () => {
         const res = await axios.get(`${API}/cart/${userid}`);
         const validItems = res.data.cart.items.filter(item => item.product !== null);
         setcheckcart(validItems);
+        console.log(validItems);
       } catch (err) { console.log(err); }
     };
     if (userid) getcart();
@@ -73,9 +77,9 @@ const Checkout = () => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const subtotal = checkcart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
-  const tax = subtotal * 0.05;
-  const total = subtotal + tax;
+  // const subtotal = checkcart.reduce((acc, item) => acc + (item.product.offerprice * item.quantity), 0);
+  // // const tax = subtotal * 0.05;
+  // const total = subtotal;
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
@@ -103,6 +107,49 @@ const Checkout = () => {
   // }
 
   const[cash,setcash]=useState("")
+
+
+  //WHATSAPP
+
+  const handleWhatsApp = () => {
+  const phoneNumber = "8903652269"; // 
+
+  if (checkcart.length === 0) {
+    alert("Cart is empty");
+    return;
+  }
+
+  const productDetails = checkcart
+    .map(
+      (item, index) =>
+`${index + 1}. ${item.product.name}
+Qty: ${item.quantity}
+Price: ₹${item.product.offerprice * item.quantity}`
+    )
+    .join("\n\n");
+
+  const message = `
+Hello SDL Creative Groups,
+
+I would like to order:
+
+${productDetails}
+
+Total Amount: ₹${total}
+
+Shipping Details:
+Name: ${formData.firstName} ${formData.lastName}
+Phone: ${formData.phone}
+Address: ${formData.street}, ${formData.city}, ${formData.state} - ${formData.pincode}
+`;
+
+  const encodedMessage = encodeURIComponent(message);
+
+  const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+  window.open(url, "_blank");
+};
+
   return (
     <div className="bg-[#fcfcfc] min-h-screen font-sans text-gray-900 flex flex-col">
       <div className="sticky top-0 z-50">
@@ -110,7 +157,7 @@ const Checkout = () => {
       </div>
 
       {/* --- LUXURY HERO SECTION --- */}
-      <section className="relative h-[300px] bg-blue-950 flex flex-col justify-center items-center px-6 overflow-hidden">
+      <section className="relative h-[300px] bg-[#8E7DBE] flex flex-col justify-center items-center px-6 overflow-hidden">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -118,7 +165,7 @@ const Checkout = () => {
         >
           <button 
             onClick={() => navigate(-1)}
-            className="text-[11px] font-bold uppercase tracking-[0.3em] text-blue-400 mb-4 flex items-center justify-center gap-2 mx-auto hover:text-white transition-colors"
+            className="text-[11px] font-bold uppercase tracking-[0.3em] text-white mb-4 flex items-center justify-center gap-2 mx-auto hover:text-white transition-colors"
           >
             <ChevronLeft size={14} /> Back to Bag
           </button>
@@ -126,7 +173,7 @@ const Checkout = () => {
             Secure Checkout
           </h1>
         </motion.div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15vw] font-black text-white/5 -z-0 select-none uppercase">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15vw] font-black text-white/15 -z-0 select-none uppercase">
           Payment
         </div>
       </section>
@@ -145,7 +192,7 @@ const Checkout = () => {
               className="bg-gray-100/60 p-8 rounded-[2.5rem] border border-gray-100"
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className="p-3 bg-[#0A2540] rounded-2xl text-white">
+                <div className="p-3 bg-[#8E7DBE] rounded-2xl text-white">
                     <UserCheck size={20} />
                 </div>
                 <h2 className="text-2xl font-semibold text-[#0A2540]">Personal Information</h2>
@@ -165,7 +212,7 @@ const Checkout = () => {
               className="bg-gray-100/60 p-8 rounded-[2.5rem] border border-gray-100"
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className="p-3 bg-[#0A2540] rounded-2xl text-white">
+                <div className="p-3 bg-[#8E7DBE] rounded-2xl text-white">
                     <Truck size={20} />
                 </div>
                 <h2 className="text-2xl font-semibold text-[#0A2540]">Delivery Details</h2>
@@ -187,7 +234,7 @@ const Checkout = () => {
               className="bg-gray-100/60 p-8 rounded-[2.5rem] border border-gray-100"
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className="p-3 bg-[#0A2540] rounded-2xl text-white">
+                <div className="p-3 bg-[#8E7DBE] rounded-2xl text-white">
                     <MonitorSmartphone size={20} />
                 </div>
                 <h2 className="text-2xl font-semibold text-[#0A2540]">Select Payment</h2>
@@ -196,7 +243,7 @@ const Checkout = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-6 bg-white rounded-[2rem] border border-gray-100 flex items-center gap-4 hover:border-blue-500 transition-all cursor-pointer group shadow-sm">
                     <div className="p-3 bg-gray-100 rounded-xl group-hover:bg-blue-50 transition-colors">
-                        <Wallet className="text-gray-400 group-hover:text-blue-600" />
+                        <Wallet className="text-gray-400 group-hover:text-[#8E7DBE]" />
                     </div>
                     <span 
                     // onClick={()=>{cashondelivery("click")}}
@@ -207,12 +254,22 @@ const Checkout = () => {
                 
                 <div 
                     onClick={handlepayment}
+                    className="p-6 bg-white rounded-[2rem] border-2 border-transparent flex items-center gap-4 hover:border-[#8E7DBE] transition-all cursor-pointer group shadow-sm"
+                >
+                    <div className="p-3 bg-gray-100 rounded-xl group-hover:bg-[#8E7DBE] transition-colors">
+                        <CreditCard className="text-gray-400 group-hover:text-[#8E7DBE]" />
+                    </div>
+                    <span className="font-bold text-[#0A2540]">Pay with Razorpay</span>
+                </div>
+
+                  <div 
+                    onClick={handleWhatsApp}
                     className="p-6 bg-white rounded-[2rem] border-2 border-transparent flex items-center gap-4 hover:border-blue-500 transition-all cursor-pointer group shadow-sm"
                 >
                     <div className="p-3 bg-gray-100 rounded-xl group-hover:bg-blue-50 transition-colors">
-                        <CreditCard className="text-gray-400 group-hover:text-blue-600" />
+                        <MessageCircleMore className="text-gray-400 group-hover:text-[#8E7DBE]" />
                     </div>
-                    <span className="font-bold text-[#0A2540]">Pay with Razorpay</span>
+                    <span className="font-bold text-[#0A2540]">Whatsapp Me</span>
                 </div>
               </div>
             </motion.section>
@@ -223,26 +280,30 @@ const Checkout = () => {
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-blue-950 text-white p-10 rounded-[2.5rem] sticky top-28 shadow-2xl overflow-hidden"
+              className="bg-[#8E7DBE] text-white p-10 rounded-[2.5rem] sticky top-28 shadow-2xl overflow-hidden"
             >
               {/* Decorative circle */}
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl" />
               
               <div className="flex items-center gap-3 mb-8 relative">
-                  <div className="p-2 bg-white/10 rounded-lg">
-                    <ShieldCheck size={20} className="text-blue-400" />
+                  <div className="p-2 bg-white rounded-lg">
+                    <ShieldCheck size={20} className="text-[#8E7DBE]" />
                   </div>
                   <h2 className="text-xl font-semibold tracking-tight">Order Summary</h2>
               </div>
 
               <div className="space-y-4 mb-8 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar relative">
                 {checkcart.map(item => (
-                  <div key={item._id} className="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <div key={item._id} className="flex justify-between items-center bg-white/60 text-black p-4 rounded-2xl border border-white/5">
                     <div className="flex flex-col">
                       <span className="text-sm font-medium line-clamp-1 w-40">{item.product.name}</span>
-                      <span className="text-[10px] text-gray-400 uppercase tracking-widest">Qty: {item.quantity}</span>
+                      <span className="text-[10px] text-gray-900 uppercase tracking-widest">Qty: {item.quantity}</span>
                     </div>
-                    <span className="font-semibold italic">₹{(item.product.price * item.quantity).toLocaleString()}</span>
+                  
+                  <div className="flex flex-col">
+                    <span className="font-semibold italic">₹{(item.product.offerprice * item.quantity)}</span>
+                      <span className="font-light line-through text-[10px] italic">₹{(item.product.price * item.quantity).toLocaleString()}</span>
+                      </div>
                   </div>
                 ))}
               </div>
@@ -254,12 +315,12 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between opacity-60">
                   <span>Shipping Fee</span>
-                  <span className="text-blue-400 font-bold text-[10px] uppercase">Complimentary</span>
+                  <span className="text-white font-bold text-[10px] uppercase">Complimentary</span>
                 </div>
-                <div className="flex justify-between opacity-60">
+                {/* <div className="flex justify-between opacity-60">
                   <span>GST (5%)</span>
                   <span>₹{tax.toLocaleString()}</span>
-                </div>
+                </div> */}
                 
                 <div className="h-[1px] bg-white/10 my-6" />
                 

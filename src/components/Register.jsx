@@ -138,12 +138,12 @@ const Register = () => {
       </AnimatePresence>
 
       {/* --- LEFT SECTION --- */}
-      <div className="relative flex-1 px-8 lg:px-12 py-8 hidden md:flex flex-col justify-between overflow-hidden bg-blue-950">
+      <div className="relative flex-1 px-8 lg:px-12 py-8 hidden md:flex flex-col justify-between overflow-hidden bg-[#8E7DBE]">
         
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div animate={floatingAnimation(3)} className="absolute top-20 right-20 w-48 h-48 bg-blue-400/20 rounded-full blur-3xl" />
-          <motion.div animate={floatingAnimation(4)} className="absolute bottom-40 left-10 w-40 h-40 bg-indigo-400/20 rounded-full blur-3xl" />
+          <motion.div animate={floatingAnimation(3)} className="absolute top-20 right-20 w-48 h-48 bg-white/40 rounded-full blur-3xl" />
+          <motion.div animate={floatingAnimation(4)} className="absolute bottom-40 left-10 w-40 h-40 bg-white/40 rounded-full blur-3xl" />
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)`, backgroundSize: '40px 40px' }} />
           <motion.div animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute -top-20 -right-20 w-96 h-96 border border-white/5 rounded-full" />
         </div>
@@ -254,7 +254,7 @@ const Register = () => {
               className={`w-full py-4 rounded-2xl text-white font-bold flex items-center justify-center gap-2 transition-all shadow-xl mt-4
                 ${isLoading 
                   ? "bg-blue-600 text-black cursor-not-allowed" 
-                  : "bg-blue-950 hover:bg-black hover:scale-[1.02] shadow-blue-900/20"
+                  : "bg-[#8E7DBE] hover:bg-black hover:scale-[1.02] shadow-blue-900/20"
                 }`}
             >
               {isLoading ? (

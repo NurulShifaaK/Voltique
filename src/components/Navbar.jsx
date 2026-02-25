@@ -27,7 +27,7 @@ const Navbar = () => {
     <>
       <nav 
         className={`fixed top-0 w-full z-[100] transition-all duration-500 px-6 md:px-12 py-2 flex items-center justify-between ${
-          scrolled ? "bg-white/80 backdrop-blur-xl py-3  shadow-sm" : "bg-transparent"
+          scrolled ? "bg-[#8E7DBE] backdrop-blur-xl py-3  shadow-sm" : "bg-transparent"
         }`}
       >
         {/* Brand Logo & Name */}
@@ -46,14 +46,14 @@ const Navbar = () => {
               key={link.name}
               to={link.path} 
               className={`relative text-[15px] font-bold uppercase  transition-colors ${
-                location.pathname === link.path ? "text-blue-950" : "text-gray-400 hover:text-black"
+                location.pathname === link.path ? "text-white" : "text-gray-400 hover:text-black"
               }`}
             >
               {link.name}
               {location.pathname === link.path && (
                 <motion.div 
                   layoutId="navUnderline"
-                  className="absolute -bottom-1 left-0 right-0 h-[2px] bg-blue-950"
+                  className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#8E7DBE]"
                 />
               )}
             </Link>
@@ -65,7 +65,7 @@ const Navbar = () => {
           <button className="hover:text-black transition-colors hidden sm:block"><Search size={18} /></button>
           <Link to="/cart" className="relative hover:text-black transition-colors">
             <ShoppingBag size={18} />
-            <span className="absolute -top-1 -right-1 bg-[#D4AF37] text-white text-[8px] w-3 h-3 rounded-full flex items-center justify-center font-bold">0</span>
+            <span className="absolute -top-1 -right-1 bg-yellow-500 text-white text-[8px] w-3 h-3 rounded-full flex items-center justify-center font-bold">0</span>
           </Link>
           <Link to="/login" className="hover:text-black transition-colors hidden sm:block"><User size={18} /></Link>
           <button className="md:hidden hover:text-black transition-colors" onClick={() => setOpen(true)}>
@@ -92,7 +92,7 @@ const Navbar = () => {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed top-0 right-0 h-full w-full max-w-[300px] bg-white z-[120] shadow-2xl flex flex-col"
             >
-              <div className="flex justify-between items-center bg-blue-950 px-8 py-3 ">
+              <div className="flex justify-between items-center bg-[#8E7DBE] px-8 py-3 ">
                 <span className="font-light uppercase text-lg text-white">Menu</span>
                 <button onClick={() => setOpen(false)} className="p-2  text-white rounded-full transition-colors">
                   <X size={24} />

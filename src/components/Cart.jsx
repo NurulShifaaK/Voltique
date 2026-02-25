@@ -69,7 +69,7 @@ const Cart = () => {
       </div>
 
       {/* --- LUXURY HERO SECTION --- */}
-      <section className="relative h-[400px] bg-blue-950 flex flex-col justify-center items-center px-6 overflow-hidden">
+      <section className="relative h-[400px] bg-[#8E7DBE] flex flex-col justify-center items-center px-6 overflow-hidden">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -77,7 +77,7 @@ const Cart = () => {
         >
           <button 
             onClick={() => navigate(-1)}
-            className="text-[11px] font-bold uppercase tracking-[0.3em] text-blue-400 mb-4 flex items-center justify-center gap-2 mx-auto hover:text-white transition-colors"
+            className="text-[11px] font-bold uppercase tracking-[0.3em] text-white mb-4 flex items-center justify-center gap-2 mx-auto hover:text-white transition-colors"
           >
             <ChevronLeft size={14} /> Continue Shopping
           </button>
@@ -87,7 +87,7 @@ const Cart = () => {
           
           <div className="relative mx-auto group">
             <div className="px-8 py-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex items-center gap-4 text-white">
-               <ShoppingBag className="text-blue-400" size={20} />
+               <ShoppingBag className="text-white" size={20} />
                <span className="text-sm font-medium tracking-wide">
                  {cart.filter(item => item.product).length} Premium items in your selection
                </span>
@@ -96,7 +96,7 @@ const Cart = () => {
         </motion.div>
         
         {/* Large Background Text */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] font-black text-white/5 -z-0 select-none uppercase">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] font-black text-white/15 -z-0 select-none uppercase">
           Cart
         </div>
       </section>
@@ -114,7 +114,7 @@ const Cart = () => {
             <p className="text-gray-500 mt-2 mb-10 text-sm font-medium">Looks like you haven't added any luxury pieces yet.</p>
             <button 
               onClick={() => navigate("/")}
-              className="bg-blue-950 text-white px-12 py-4 rounded-xl font-bold hover:bg-black transition-all shadow-lg shadow-blue-900/10"
+              className="bg-[#8E7DBE] text-white px-12 py-4 rounded-xl font-bold hover:bg-black transition-all shadow-lg shadow-blue-900/10"
             >
               Start Shopping
             </button>
@@ -162,7 +162,7 @@ const Cart = () => {
 
                       <div className="flex justify-between items-end mt-8">
                         <div className="flex items-center gap-6">
-                           <div className="flex items-center  gap-3 bg-[#0A2540] text-white px-4 py-1.5 rounded-full shadow-md">
+                           <div className="flex items-center  gap-3 bg-[#8E7DBE] text-white px-4 py-1.5 rounded-full shadow-md">
                              <span className="text-sm font-semibold uppercase opacity-60">Qty: </span>
                              <span className="text-sm ">{item.quantity}</span>
                            </div>
@@ -187,11 +187,11 @@ const Cart = () => {
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-blue-950 text-white p-10 rounded sticky top-28 shadow-2xl"
+                className="bg-[#8E7DBE] text-white p-10 rounded sticky top-28 shadow-2xl"
               >
                 <div className="flex items-center gap-3 mb-8">
-                   <div className="p-2 bg-gray-500 rounded-lg">
-                      <ShieldCheck size={20} className="text-white" />
+                   <div className="p-2 bg-white rounded-lg">
+                      <ShieldCheck size={20} className="text-[#8E7DBE]" />
                    </div>
                    <h2 className="text-lg font-semibold tracking-tight">Order Summary</h2>
                 </div>
@@ -248,3 +248,5 @@ const Cart = () => {
 };
 
 export default Cart;
+
+

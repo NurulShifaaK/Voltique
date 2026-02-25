@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {  useNavigate } from "react-router-dom";
-import { Menu, X, LayoutDashboard, PackagePlus, Users, ShoppingBag, LogOut } from "lucide-react";
+import { Menu, X, LayoutDashboard, PackagePlus, Users, ShoppingBag, LogOut, Podcast } from "lucide-react";
 
 const SuperAdminNav = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +13,7 @@ const SuperAdminNav = () => {
     { name: "Products", path: "/productupload", icon: PackagePlus },
     { name: "Users", path: "/superadminusermanagement", icon: Users },
     { name:"Category" ,path:"/categoryupload", icon: PackagePlus},
+    { name:"Banner" ,path:"/bannerupload", icon: Podcast},
   ];
 
   return (
@@ -23,10 +24,10 @@ const SuperAdminNav = () => {
           
           {/* Logo Section */}
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 bg-blue-950 rounded-lg flex items-center justify-center">
+            <div className="h-8 w-8 bg-[#8E7DBE] rounded-lg flex items-center justify-center">
               <div className="h-3 w-3 bg-white rotate-45" />
             </div>
-            <h1 className="text-lg font-bold text-blue-950 tracking-tight">
+            <h1 className="text-lg font-bold text-[#8E7DBE] tracking-tight">
               SUPER <span className="font-light text-slate-400">ADMIN</span>
             </h1>
           </div>
@@ -41,8 +42,8 @@ const SuperAdminNav = () => {
                   to={link.path}
                   className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 flex items-center gap-2 ${
                     isActive 
-                      ? "bg-blue-950 text-white shadow-lg shadow-blue-900/20" 
-                      : "text-slate-500 hover:text-blue-950 hover:bg-slate-50"
+                      ? "bg-[#8E7DBE] text-white shadow-lg shadow-blue-900/20" 
+                      : "text-slate-500 hover:text-[#8E7DBE] hover:bg-slate-50"
                   }`}
                 >
                   <link.icon size={16} />
@@ -82,7 +83,7 @@ const SuperAdminNav = () => {
 
             {/* Sidebar Content */}
             <div className="fixed top-0 left-0 h-full w-72 bg-white z-120 shadow-2xl flex flex-col">
-              <div className="flex justify-between items-center px-4 py-3 border-b border-slate-100 bg-blue-950">
+              <div className="flex justify-between items-center px-4 py-3 border-b border-slate-100 bg-[#8E7DBE]">
                 <div className="flex items-center gap-2 ">
                   <div className="h-6 w-6 bg-white rounded" />
                   <h2 className=" font-bold text-white">Menu</h2>
@@ -105,8 +106,8 @@ const SuperAdminNav = () => {
                       onClick={() => setIsOpen(false)}
                       className={`flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-bold transition-all ${
                         isActive 
-                          ? "bg-blue-950 text-white" 
-                          : "text-slate-500 hover:bg-slate-50 hover:text-blue-950"
+                          ? "bg-[#8E7DBE] text-white" 
+                          : "text-slate-500 hover:bg-slate-50 hover:text-[#8E7DBE]"
                       }`}
                     >
                       <link.icon size={18} />

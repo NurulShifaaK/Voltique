@@ -133,7 +133,7 @@ const Login = () => {
       </AnimatePresence>
 
       {/* --- LEFT SECTION (Visual/Dark) --- */}
-      <div className="relative flex-1 px-8 lg:px-12 py-8 hidden md:flex flex-col justify-between overflow-hidden bg-blue-950">
+      <div className="relative flex-1 px-8 lg:px-12 py-8 hidden md:flex flex-col justify-between overflow-hidden bg-[#8E7DBE]">
         
         {/* Decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -240,7 +240,7 @@ const Login = () => {
               className={`w-full py-4 rounded-2xl text-white font-bold flex items-center justify-center gap-3 transition-all shadow-xl
                 ${isLoading 
                   ? "bg-blue-400 cursor-not-allowed" 
-                  : "bg-blue-950 hover:bg-black hover:scale-[1.01] active:scale-[0.99] shadow-blue-900/20"
+                  : "bg-[#8E7DBE] hover:bg-black hover:scale-[1.01] active:scale-[0.99] shadow-blue-900/20"
                 }`}
             >
               {isLoading ? (

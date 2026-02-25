@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { 
   Package, Users, ShoppingCart, 
   ArrowUpRight, Activity, Zap, 
@@ -9,6 +10,7 @@ import {
 import SuperAdminNav from './SuperAdminNav';
 
 const Superdashboard = () => {
+  const navi=useNavigate()
   // Animation Variants
   const containerVars = {
     initial: { opacity: 0 },
@@ -30,7 +32,7 @@ const Superdashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-blue-950 font-sans pb-20">
+    <div className="min-h-screen bg-[#f8fafc] text-[#8E7DBE] font-sans pb-20">
       <SuperAdminNav />
 
       <main className="max-w-[1400px] mx-auto px-6 lg:px-12 py-10">
@@ -42,8 +44,8 @@ const Superdashboard = () => {
           className="mb-12"
         >
           <div className="flex items-center gap-3 mb-2">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">System Online</span>
+            <span className="flex h-2 w-2 rounded-full bg-[#8E7DBE] animate-pulse" />
+            <span className="text-[15px] font-bold text-black uppercase">System Online</span>
           </div>
           <h1 className="text-4xl font-light tracking-tight">
             Control <span className="font-bold">Console</span>
@@ -66,7 +68,7 @@ const Superdashboard = () => {
           ].map((stat, i) => (
             <motion.div variants={itemVars} key={i} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex justify-between items-start mb-4">
-                <div className="p-3 bg-slate-50 rounded-2xl text-blue-950">
+                <div className="p-3 bg-slate-50 rounded-2xl text-[#8E7DBE]">
                   <stat.icon size={20} />
                 </div>
                 <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
@@ -83,8 +85,8 @@ const Superdashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           <div className="lg:col-span-2">
-            <h2 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-              <Zap size={14} className="text-blue-600" /> Operational Hub
+            <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+              <Zap size={14} className="text-[#8E7DBE]" /> Operational Hub
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {quickActions.map((action, i) => (
@@ -92,7 +94,7 @@ const Superdashboard = () => {
                   <motion.div 
                     whileHover={{ scale: 1.02, y: -5 }}
                     whileTap={{ scale: 0.98 }}
-                    className="group bg-blue-950 p-6 rounded-[2rem] text-white relative overflow-hidden h-48 flex flex-col justify-end"
+                    className="group bg-[#8E7DBE] p-6 rounded-[2rem] text-white relative overflow-hidden h-48 flex flex-col justify-end"
                   >
                     <div className="absolute top-6 right-6 p-3 bg-white/10 rounded-2xl backdrop-blur-md group-hover:bg-white group-hover:text-blue-950 transition-colors">
                       <action.icon size={24} />
@@ -121,10 +123,11 @@ const Superdashboard = () => {
             <h2 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-8">System Logs</h2>
             <div className="space-y-8">
               {[
-                { time: '2m ago', msg: 'New admin account provisioned', type: 'user' },
-                { time: '14m ago', msg: 'iPhone 15 stock updated', type: 'stock' },
-                { time: '1h ago', msg: 'Server maintenance completed', type: 'sys' },
-                { time: '3h ago', msg: 'Bulk SKU export generated', type: 'data' },
+                { time: '2m ago', msg: 'New wholesale partner account approved', type: 'user' },
+{ time: '14m ago', msg: 'Luxury Silk Abaya stock updated', type: 'stock' },
+{ time: '1h ago', msg: 'Ramadan Collection photoshoot assets uploaded', type: 'sys' },
+{ time: '3h ago', msg: 'Pre-order manifest for Eid Drop generated', type: 'data' },
+             
               ].map((log, i) => (
                 <div key={i} className="flex gap-4 items-start">
                   <div className="w-[2px] h-10 bg-slate-100 mt-1 relative">
@@ -138,7 +141,9 @@ const Superdashboard = () => {
               ))}
             </div>
             
-            <button className="w-full mt-10 py-4 bg-slate-50 text-slate-400 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-100 transition-colors flex items-center justify-center gap-2">
+            <button 
+            onClick={navi("/productupload")}
+            className="w-full mt-10 py-4 bg-[#8E7DBE] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
               View All Logs <ArrowUpRight size={14} />
             </button>
           </motion.div>

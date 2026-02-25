@@ -93,7 +93,7 @@ const deleteuser = async (id) => {
           <div className="flex items-center gap-2">
             <span 
             onClick={() => setIsModalOpen(true)}
-            className=" bg-blue-950 px-4 py-2 font-semibold text-white rounded-xl border border-slate-200 shadow-sm ">
+            className=" bg-[#8E7DBE] px-4 py-2 font-semibold text-white rounded-xl border border-slate-200 shadow-sm ">
             Add new User</span>
             <div className="bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
               <span className="text-2xl font-bold">{users.length}</span>
@@ -121,7 +121,7 @@ const deleteuser = async (id) => {
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
           {loading ? (
             <div className="p-20 flex flex-col items-center justify-center gap-4">
-              <Loader2 className="animate-spin text-blue-950" size={32} />
+              <Loader2 className="animate-spin text-[#8E7DBE]" size={32} />
               <p className="text-sm font-medium text-slate-400">Fetching Access Logs...</p>
             </div>
           ) : (
@@ -148,7 +148,7 @@ const deleteuser = async (id) => {
                       >
                         <td className="px-8 py-5">
                           <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 bg-blue-950 text-white flex items-center justify-center text-xs font-bold rounded-xl shadow-inner group-hover:scale-110 transition-transform">
+                            <div className="h-10 w-10 bg-[#8E7DBE] text-white flex items-center justify-center text-xs font-bold rounded-xl shadow-inner group-hover:scale-110 transition-transform">
                               {user.name?.charAt(0) || <User size={14}/>}
                             </div>
                             <div>
@@ -160,7 +160,7 @@ const deleteuser = async (id) => {
                         <td className="px-8 py-5">
                           <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1 rounded-full border transition-all ${
                             user.role === "ADMIN" 
-                              ? "bg-blue-950 text-white border-blue-950 shadow-md shadow-blue-900/10" 
+                              ? "bg-[#8E7DBE] text-white shadow-md shadow-blue-900/10" 
                               : "bg-white text-slate-600 border-slate-200"
                           }`}>
                             {user.role === "ADMIN" ? <Shield size={10} /> : <User size={10} />}

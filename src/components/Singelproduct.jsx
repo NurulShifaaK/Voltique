@@ -3,7 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { Minus, Plus, ShoppingBag, CreditCard, ChevronLeft, ShieldCheck, Truck, Star, Award, CheckCircle } from "lucide-react";
+import { 
+  Minus, Plus, ShoppingBag, Share2, ChevronLeft, 
+  ShieldCheck, Truck, Star, Award, CheckCircle, 
+  Scissors, Heart, Ruler 
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Singelproduct = () => {
@@ -12,15 +16,19 @@ const Singelproduct = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('Product Details');
+  const [activeTab, setActiveTab] = useState('Fabric & Fit');
   const [increment, setincrement] = useState(1);
   const navigate = useNavigate();
+
+  // Primary Theme Color
+  const primaryColor = "#8E7DBE";
 
   useEffect(() => {
     const fetchsingleproduct = async () => {
       try {
         const res = await axios.get(`${API}/product/${id}`);
-        setProduct(res.data.singleproduct);
+        // Ensure this matches your backend response key
+        setProduct(res.data.product || res.data.singleproduct);
       } catch (err) {
         console.log(err);
       } finally {
@@ -32,123 +40,119 @@ const Singelproduct = () => {
 
   const handleaddcart = async () => {
     try {
-
-       if(!userid){
+      if (!userid) {
         navigate("/login");
         return;
       }
-
       await axios.post(`${API}/addtocart`, {
         sessionId: userid,
         productId: id,
         quantity: increment,
       });
-     
       navigate("/cart");
-      
     } catch (err) {
       console.log(err);
     }
   };
 
-  //shareapi
   const handleShare = async () => {
-  try {
-    const shareData = {
-      title: product?.name,
-      text: `Check out this product: ${product?.name} - ₹${product?.price}`,
-      url: window.location.href
-    };
-
-    if (navigator.share) {
-      await navigator.share(shareData);
-    } else {
-      await navigator.clipboard.writeText(window.location.href);
-      alert("Product link copied to clipboard!");
+    try {
+      const shareData = {
+        title: product?.name,
+        text: `Explore this elegant design: ${product?.name} at SDL Abaya Boutique`,
+        url: window.location.href
+      };
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("Boutique link copied!");
+      }
+    } catch (err) {
+      console.log("Share failed:", err);
     }
-  } catch (err) {
-    console.log("Share failed:", err);
-  }
-};
+  };
 
-  // Professional Content for Tabs
   const tabContent = {
-    'Product Details': (
+    'Fabric & Fit': (
       <motion.div 
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="grid grid-cols-1 md:grid-cols-2 gap-12"
       >
         <div className="space-y-6">
-          <div className="flex items-center gap-2 text-blue-900">
-            <Award size={18} />
-            <h4 className="text-sm font-bold uppercase tracking-wider">Technical Specifications</h4>
+          <div className="flex items-center gap-2" style={{ color: primaryColor }}>
+            <Scissors size={18} />
+            <h4 className="text-sm font-bold uppercase tracking-wider">Craftsmanship Details</h4>
           </div>
           <div className="space-y-3 text-sm text-gray-700">
             <p className="flex justify-between border-b border-gray-100 pb-2">
-              <span className="text-gray-500">Collection Category</span> 
+              <span className="text-gray-500">Collection</span> 
               <span className="font-semibold text-gray-900">{product?.category}</span>
             </p>
             <p className="flex justify-between border-b border-gray-100 pb-2">
-              <span className="text-gray-500">Serial Reference</span> 
-              <span className="font-semibold text-gray-900">#SDL-{product?._id?.slice(-8).toUpperCase()}</span>
+              <span className="text-gray-500">Fabric Type</span> 
+              <span className="font-semibold text-gray-900">Premium Nida / Lexington</span>
             </p>
             <p className="flex justify-between border-b border-gray-100 pb-2">
-              <span className="text-gray-500">Material Composition</span> 
-              <span className="font-semibold text-gray-900">Premium Grade Componentry</span>
+              <span className="text-gray-500">Design ID</span> 
+              <span className="font-semibold text-gray-900">AB-{product?._id?.slice(-5).toUpperCase()}</span>
             </p>
             <p className="flex justify-between border-b border-gray-100 pb-2">
-              <span className="text-gray-500">Quality Assurance</span> 
-              <span className="font-semibold text-green-600">Passed / Certified</span>
+              <span className="text-gray-500">Workmanship</span> 
+              <span className="font-semibold" style={{ color: primaryColor }}>Hand-Finished</span>
             </p>
           </div>
         </div>
-        <div className="bg-gray-50 p-6 rounded-2xl">
-          <h4 className="text-sm font-bold uppercase tracking-wider text-gray-900 mb-4">Design Notes</h4>
+        <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
+          <div className="flex items-center gap-2 mb-4">
+            <Ruler size={16} className="text-slate-400" />
+            <h4 className="text-sm font-bold uppercase tracking-wider text-gray-900">Sizing Guide</h4>
+          </div>
           <p className="text-sm text-gray-600 leading-relaxed">
-            The {product?.name} is engineered for those who value both form and function. This piece undergoes a rigorous multi-point inspection to ensure it meets our standards of durability. Every curve and material choice in the {product?.category} line is purposeful, designed to provide a seamless user experience while maintaining a modern professional aesthetic.
+            Our {product?.name} is tailored for a modest, fluid silhouette. We recommend selecting based on your height (52-60). This specific {product?.category} cut features a refined drape that complements all body types while maintaining traditional modesty standards.
           </p>
         </div>
       </motion.div>
     ),
-    'Curation Story': (
+    'Boutique Story': (
       <motion.div 
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl space-y-6"
       >
-        <h3 className="text-2xl font-bold text-gray-900 leading-tight">A Commitment to Excellence</h3>
+        <h3 className="text-3xl font-serif italic text-gray-900">An Intersection of Modesty & Luxury</h3>
         <p className="text-base text-gray-600 leading-relaxed">
-          At SDL, our curation process for the {product?.name} began with a simple question: "How can we elevate the daily experience?" We sourced this item specifically for its heritage and manufacturing integrity. 
+          The {product?.name} represents our commitment to the modern Muslimah. Sourced from the finest textile mills, this garment undergoes a 12-point quality check to ensure the embroidery, stitching, and hemline meet luxury boutique standards.
         </p>
         <p className="text-base text-gray-600 leading-relaxed">
-          The {product?.category} collection represents a bridge between traditional quality and contemporary needs. By selecting the {product?.name}, you aren't just purchasing a product; you are investing in a curated piece of design that has been vetted for excellence by our global procurement team.
+          Every Abaya in our {product?.category} line is designed with the intention of longevity. We believe in "Slow Fashion"—creating pieces that remain timeless staples in your wardrobe for years to come.
         </p>
       </motion.div>
     ),
-    'Reviews': (
+    'Appreciations': (
       <motion.div 
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
         className="space-y-8"
       >
         {[
-          { name: "Alexander V.", date: "Feb 12, 2026", text: "The build quality of this product is exceptional. It arrived in secure packaging and the performance matches the premium price point. Highly recommended for professionals." },
-          { name: "Sarah Jenkins", date: "Jan 28, 2026", text: "The attention to detail on the {product?.name} is evident from the moment you unbox it. Fast shipping and excellent customer service from the SDL team." }
+          { name: "Mariam K.", date: "Feb 15, 2026", text: "The fabric of this Abaya is heavenly. It doesn't crease easily and the drape is very elegant. Perfect for formal occasions." },
+          { name: "Fatima Shah", date: "Jan 30, 2026", text: "Truly impressed by the SDL quality. The black is deep and rich, and the sizing is spot on. Will definitely order from this collection again." }
         ].map((rev, i) => (
           <div key={i} className="group border-b border-gray-100 pb-8">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <div className="flex text-yellow-500 mb-1">
+                <div className="flex mb-1" style={{ color: primaryColor }}>
                   {[...Array(5)].map((_, idx) => <Star key={idx} size={14} fill="currentColor" />)}
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold text-gray-900">{rev.name}</span>
                   <CheckCircle size={14} className="text-blue-500" />
-                  <span className="text-xs text-blue-500 font-medium">Verified Purchase</span>
+                  <span className="text-[10px] text-blue-500 font-bold uppercase tracking-tighter">Verified Client</span>
                 </div>
               </div>
               <span className="text-xs font-medium text-gray-400">{rev.date}</span>
             </div>
-            <p className="text-sm text-gray-600 leading-relaxed group-hover:text-gray-900 transition-colors">
-              "{rev.text.replace("{product?.name}", product?.name)}"
+            <p className="text-sm text-gray-600 leading-relaxed italic">
+              "{rev.text}"
             </p>
           </div>
         ))}
@@ -157,160 +161,161 @@ const Singelproduct = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen font-sans text-gray-900 selection:bg-blue-100">
+    <div className="bg-white min-h-screen font-sans text-gray-900 selection:bg-[#8E7DBE]/20">
       <Navbar />
 
       {loading ? (
         <div className="flex justify-center items-center h-[70vh]">
-          <div className="w-10 h-10 border-4 border-gray-100 border-t-blue-900 rounded-full animate-spin" />
+          <div className="w-12 h-12 border-2 border-slate-100 border-t-[#8E7DBE] rounded-full animate-spin" />
         </div>
       ) : (
         <div className="max-w-7xl mx-auto px-6 py-10 lg:py-16">
-          {/* Animated Header Navigation */}
           <motion.button 
             initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-blue-900 mb-10 transition-all group"
+            className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-[#8E7DBE] mb-10 transition-all group"
           >
-            <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> 
-            Back to Collection
+            <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
+            Back to Boutique
           </motion.button>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             
-            {/* Image Gallery with Motion */}
+            {/* Image Section */}
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="bg-[#fcfcfc] rounded-3xl p-12 aspect-square flex items-center justify-center relative overflow-hidden group border border-gray-50"
+              initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
+              className="bg-[#F9F8FB] rounded-[3rem] p-8 md:p-16 aspect-[3/4] flex items-center justify-center relative overflow-hidden group border border-slate-100 shadow-inner"
             >
               <img
                 src={product?.images?.[0]?.url}
                 alt={product?.name}
-                className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-1000"
               />
-              <div className="absolute top-6 right-6">
-                <div className="bg-white/80 backdrop-blur-md border border-gray-100 px-4 py-2 rounded-full shadow-sm">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-800">Quality Certified</span>
+              <div className="absolute bottom-8 left-8">
+                <div className="bg-white/90 backdrop-blur-md px-5 py-2 rounded-full shadow-sm border border-[#8E7DBE]/10">
+                  <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: primaryColor }}>Lux Quality</span>
                 </div>
               </div>
             </motion.div>
 
-            {/* Content Staggering */}
-            <div className="flex flex-col">
+            {/* Product Info Section */}
+            <div className="flex flex-col pt-4">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                className="border-b border-gray-100 pb-8"
+              >
+                <span className="inline-block px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] mb-6" style={{ backgroundColor: `${primaryColor}15`, color: primaryColor }}>
+                  {product?.category}
+                </span>
+                <h1 className="text-4xl md:text-5xl font-serif italic font-medium text-gray-900 tracking-tight mb-6">
+                  {product?.name}
+                </h1>
+                <div className="flex items-baseline gap-4">
+                  <p className="text-4xl font-light text-gray-900">₹{product?.price?.toLocaleString()}</p>
+                  <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Inclusive of all taxes</span>
+                </div>
+              </motion.div>
+
               <motion.div 
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="border-b border-gray-100 pb-8"
-              >
-                <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-[0.2em] rounded mb-4">
-                  {product?.category}
-                </span>
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-4">
-                  {product?.name}
-                </h1>
-                <div className="flex items-center gap-4">
-                  <p className="text-3xl font-bold text-gray-900">₹{product?.price?.toLocaleString()}</p>
-                  <span className="text-sm text-gray-400 font-medium">VAT Included</span>
-                </div>
-              </motion.div>
-
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="py-8 space-y-6"
+                className="py-10 space-y-8"
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-2 h-2 rounded-full ${product?.stock > 0 ? "bg-green-500" : "bg-red-500"} animate-pulse`} />
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-500">
-                    {product?.stock > 0 ? `Stock Available: ${product.stock} Units` : "Currently Unavailable"}
+                  <div className={`w-2 h-2 rounded-full animate-pulse`} style={{ backgroundColor: product?.stock > 0 ? '#10B981' : '#EF4444' }} />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">
+                    {product?.stock > 0 ? `Ready to Ship: ${product.stock} Designs left` : "Out of Stock"}
                   </span>
                 </div>
-                <p className="text-lg text-gray-600 leading-relaxed font-normal">
-                  {product?.description}
+                <p className="text-lg text-gray-600 leading-relaxed font-light italic">
+                  "{product?.description}"
                 </p>
               </motion.div>
 
-              {/* Quantity Selector */}
+              {/* Quantity Selection */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="flex items-center gap-10 py-8 border-t border-slate-50"
+              >
+                <span className="text-[11px] font-black uppercase tracking-widest text-gray-900">Quantity</span>
+                <div className="flex items-center border border-slate-200 rounded-full bg-white px-2 py-1">
+                  <button onClick={() => setincrement(Math.max(1, increment - 1))} className="p-3 hover:text-[#8E7DBE] transition-colors">
+                    <Minus size={14} />
+                  </button>
+                  <span className="px-6 font-bold text-base min-w-[50px] text-center">{increment}</span>
+                  <button onClick={() => setincrement(increment + 1)} className="p-3 hover:text-[#8E7DBE] transition-colors">
+                    <Plus size={14} />
+                  </button>
+                </div>
+              </motion.div>
+
+              {/* Buttons */}
               <motion.div 
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="flex items-center gap-8 py-6 border-t border-gray-50"
-              >
-                <span className="text-xs font-black uppercase tracking-widest text-gray-900">Select Quantity</span>
-                <div className="flex items-center border-2 border-gray-100 rounded-xl bg-white overflow-hidden">
-                  <button onClick={() => setincrement(Math.max(1, increment - 1))} className="p-4 hover:bg-gray-50 transition-colors">
-                    <Minus size={16} />
-                  </button>
-                  <span className="px-6 font-bold text-lg">{increment}</span>
-                  <button onClick={() => setincrement(increment + 1)} className="p-4 hover:bg-gray-50 transition-colors">
-                    <Plus size={16} />
-                  </button>
-                </div>
-              </motion.div>
-
-              {/* Action Buttons */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8"
+                className="grid grid-cols-1 sm:grid-cols-5 gap-4 mt-4"
               >
                 <button 
                   onClick={handleaddcart}
-                  className="flex items-center justify-center gap-3 bg-blue-900 text-white py-5 rounded-2xl font-bold hover:bg-black transition-all shadow-xl shadow-blue-900/10 active:scale-[0.98]"
+                  style={{ backgroundColor: primaryColor }}
+                  className="sm:col-span-4 flex items-center justify-center gap-3 text-white py-5 rounded-[2rem] font-bold uppercase text-xs tracking-[0.2em] hover:brightness-90 transition-all shadow-xl shadow-[#8E7DBE]/20 active:scale-[0.98]"
                 >
-                  <ShoppingBag size={20} /> Add to Bag
+                  <ShoppingBag size={18} /> Add to Boutique Bag
                 </button>
                 <button 
                   onClick={handleShare}
-                  className="flex items-center justify-center gap-3 border-2 border-gray-900/40 py-5 rounded-2xl font-bold hover:bg-gray-900 hover:text-white transition-all active:scale-[0.98]">
-                  <CreditCard size={20} /> Share
+                  className="sm:col-span-1 flex items-center justify-center border border-slate-200 py-5 rounded-[2rem] text-slate-400 hover:text-[#8E7DBE] hover:border-[#8E7DBE] transition-all active:scale-[0.98]">
+                  <Share2 size={20} />
                 </button>
               </motion.div>
 
-              {/* Professional Trust Badges */}
+              {/* Trust Section */}
               <motion.div 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mt-12 grid grid-cols-2 gap-6"
+                transition={{ delay: 0.4 }}
+                className="mt-14 grid grid-cols-2 gap-8 border-t border-slate-50 pt-10"
               >
                 <div className="flex items-start gap-4">
-                  <ShieldCheck size={28} className="text-blue-900 mt-1" />
+                  <Award size={24} style={{ color: primaryColor }} className="mt-1" />
                   <div>
-                    <h5 className="text-xs font-bold uppercase">Certified Warranty</h5>
-                    <p className="text-[11px] text-gray-500 mt-1">24-month protection plan included with purchase.</p>
+                    <h5 className="text-[10px] font-black uppercase tracking-widest">Premium Fabric</h5>
+                    <p className="text-[11px] text-gray-400 mt-1 leading-relaxed">Sourced from the finest local textile artisans.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <Truck size={28} className="text-blue-900 mt-1" />
+                  <Truck size={24} style={{ color: primaryColor }} className="mt-1" />
                   <div>
-                    <h5 className="text-xs font-bold uppercase">Priority Logistics</h5>
-                    <p className="text-[11px] text-gray-500 mt-1">Insured expedited delivery to your doorstep.</p>
+                    <h5 className="text-[10px] font-black uppercase tracking-widest">Global Delivery</h5>
+                    <p className="text-[11px] text-gray-400 mt-1 leading-relaxed">Secure, insured shipping to your doorstep.</p>
                   </div>
                 </div>
               </motion.div>
             </div>
           </div>
 
-          {/* Interactive Tabs Section */}
-          <div className="mt-24 border-t border-gray-100 pt-16">
-            <div className="flex gap-12 mb-12 border-b border-gray-50 overflow-x-auto no-scrollbar">
+          {/* Tabs */}
+          <div className="mt-32 border-t border-gray-100 pt-20">
+            <div className="flex gap-12 mb-16 border-b border-gray-50 overflow-x-auto no-scrollbar">
               {Object.keys(tabContent).map((tab) => (
                 <button 
                   key={tab} 
                   onClick={() => setActiveTab(tab)}
-                  className={`text-sm font-bold uppercase tracking-[0.2em] pb-6 relative transition-all ${activeTab === tab ? 'text-blue-900' : 'text-gray-400 hover:text-gray-900'}`}
+                  className={`text-[11px] font-black uppercase tracking-[0.3em] pb-8 relative transition-all ${activeTab === tab ? 'text-gray-900' : 'text-gray-300 hover:text-[#8E7DBE]'}`}
                 >
                   {tab}
                   {activeTab === tab && (
-                    <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-1 bg-blue-900 rounded-t-full" />
+                    <motion.div 
+                      layoutId="activeTab" 
+                      className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full" 
+                      style={{ backgroundColor: primaryColor }}
+                    />
                   )}
                 </button>
               ))}
             </div>
             
-            <div className="min-h-[300px]">
+            <div className="">
               <AnimatePresence mode="wait">
                 <div key={activeTab}>
                   {tabContent[activeTab]}
