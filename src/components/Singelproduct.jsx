@@ -29,6 +29,7 @@ const Singelproduct = () => {
         const res = await axios.get(`${API}/product/${id}`);
         // Ensure this matches your backend response key
         setProduct(res.data.product || res.data.singleproduct);
+        console.log(res.data.product);
       } catch (err) {
         console.log(err);
       } finally {
@@ -207,19 +208,54 @@ const Singelproduct = () => {
                 <span className="inline-block px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] mb-6" style={{ backgroundColor: `${primaryColor}15`, color: primaryColor }}>
                   {product?.category}
                 </span>
-                <h1 className="text-4xl md:text-5xl font-serif italic font-medium text-gray-900 tracking-tight mb-6">
+                <h1 className="text-3xl md:text-4xl font-serif italic font-medium text-gray-900 tracking-tight mb-6">
                   {product?.name}
                 </h1>
                 <div className="flex items-baseline gap-4">
-                  <p className="text-4xl font-light text-gray-900">₹{product?.price?.toLocaleString()}</p>
-                  <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Inclusive of all taxes</span>
+                  <p className="text-xl line-through font-light text-gray-900">₹{product?.price?.toLocaleString()}</p>
+                  <p className="text-4xl font-light text-gray-900">₹{product?.offerprice?.toLocaleString()}</p>
                 </div>
+
+<div className="mt-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+  <div className="flex flex-col  gap-3">
+  
+    <div 
+      className="h-6 w-6 rounded-full border-2 border-white shadow-sm" 
+      style={{ 
+        backgroundColor: product.colors 
+          ? (product.colors.startsWith('#') ? product.colors : `#${product.colors}`) 
+          : '#cbd5e1' 
+      }} 
+      title={`Color: ${product.colors}`}
+    >
+      </div>
+    
+    
+    <div className="flex items-center">
+      <span className="text-xs font-bold text-slate-400 ">Material :  </span>
+      <div className=" px-1 text-sm text-slate-700">
+        {product.clothType || "Standard Fabric"}
+      </div>
+    </div>
+
+
+
+  <div>
+  {product.sizes && (
+    <div className="text-[10px] font-bold text-[#8E7DBE] bg-[#8E7DBE]/10 w-fit px-2 py-0.5 rounded-md">
+      Size: {product.sizes}
+    </div>
+  )}
+  </div>
+    </div>
+
+</div>
               </motion.div>
 
               <motion.div 
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="py-10 space-y-8"
+                className="py-5 space-y-8"
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-2 h-2 rounded-full animate-pulse`} style={{ backgroundColor: product?.stock > 0 ? '#10B981' : '#EF4444' }} />
@@ -236,7 +272,7 @@ const Singelproduct = () => {
               <motion.div 
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="flex items-center gap-10 py-8 border-t border-slate-50"
+                className="flex items-center gap-10  border-t border-slate-50"
               >
                 <span className="text-[11px] font-black uppercase tracking-widest text-gray-900">Quantity</span>
                 <div className="flex items-center border border-slate-200 rounded-full bg-white px-2 py-1">

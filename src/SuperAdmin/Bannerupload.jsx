@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SuperAdminNav from "./SuperAdminNav";
 import { motion } from "framer-motion";
-import { Plus, Image as ImageIcon, Link, Palette, Type, Layout, Trash2 } from "lucide-react";
+import { Plus, Image as ImageIcon, Link, Palette, Type, Layout, Trash2, Trash2Icon } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
@@ -210,6 +210,7 @@ const BannerUpload = () => {
                   const hasBgImg = item.bgimg && item.bgimg.length > 0 && item.bgimg[0].url;
                   
                   return (
+                    
                     <div 
                       key={item._id}
                       className="relative w-full h-[220px] rounded-[2rem] overflow-hidden group shadow-md transition-all duration-500 hover:shadow-xl hover:-translate-y-1"
@@ -220,6 +221,7 @@ const BannerUpload = () => {
                         backgroundPosition: 'center'
                       }}
                     >
+                     
                       {/* Dark Overlay for Text Readability if BG Image exists */}
                       {hasBgImg && <div className="absolute inset-0 bg-black/20" />}
 
@@ -245,19 +247,29 @@ const BannerUpload = () => {
                             className="max-h-[85%] w-auto object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.3)] transform group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-500"
                           />
                         )}
+                      
+                      
                       </div>
 
-                      {/* Delete Action */}
+                    
+
+                         {/* Delete Action */}
                       <button 
                         onClick={() => handledelete(item._id)}
-                        className="absolute top-4 right-4 p-3 bg-white/90 text-red-500 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500 hover:text-white"
+                        className="absolute top-4 right-4 p-3   text-red-500 rounded-full shadow-lg bg-white transition-opacity hover:bg-red-500 hover:text-white"
                       >
-                        <Trash2 size={18} />
+                        {/* <Trash2 size={18} /> */}
+                        Delete
                       </button>
+
+                   
                     </div>
+
+                    
                   );
                 })}
               </div>
+            
             </div>
           </div>
 

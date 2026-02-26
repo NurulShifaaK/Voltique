@@ -73,9 +73,9 @@ const AdminDashboard = () => {
         transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
         className="mb-4"
       >
-        <Layers className="text-blue-950" size={40} />
+        <Layers className="text-[#8E7DBE]" size={40} />
       </motion.div>
-      <p className="text-blue-950 font-medium tracking-widest text-xs uppercase animate-pulse">Initializing Systems</p>
+      <p className="text-[#8E7DBE] font-medium tracking-widest text-xs uppercase animate-pulse">Initializing Systems</p>
     </div>
   );
 
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-blue-950 font-sans selection:bg-blue-100">
+    <div className="min-h-screen bg-slate-50 text-[#8E7DBE] font-sans selection:bg-blue-100">
       <AdminNavbar />
 
       <motion.div 
@@ -99,13 +99,13 @@ const AdminDashboard = () => {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
           <motion.div variants={itemVars}>
-            <h1 className="text-4xl font-light tracking-tight text-blue-950">
+            <h1 className="text-4xl font-light tracking-tight text-[#8E7DBE]">
               Console <span className="font-semibold">Overview</span>
             </h1>
             <div className="flex items-center gap-2 mt-2">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8E7DBE] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#8E7DBE]"></span>
               </span>
               <p className="text-slate-500 text-sm font-medium">Live Server Metrics: {new Date().toLocaleDateString()}</p>
             </div>
@@ -115,7 +115,7 @@ const AdminDashboard = () => {
             variants={itemVars}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center gap-2 bg-blue-950 text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-lg shadow-blue-900/20 transition-all"
+            className="flex items-center gap-2 bg-[#8E7DBE] text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-lg shadow-blue-900/20 transition-all"
           >
             <Activity size={18} />
             Generate Report
@@ -132,7 +132,7 @@ const AdminDashboard = () => {
               className="bg-white p-7 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between relative overflow-hidden group"
             >
               <div className="flex justify-between items-start mb-4">
-                <div className="p-3 rounded-lg bg-blue-50 text-blue-950 group-hover:bg-blue-950 group-hover:text-white transition-all duration-300">
+                <div className="p-3 rounded-lg bg-blue-50 text-blue-950 group-hover:bg-[#8E7DBE] group-hover:text-white transition-all duration-300">
                   <stat.icon size={22} />
                 </div>
                 <span className={`text-[11px] font-bold px-2 py-1 rounded-md bg-slate-50 ${stat.color}`}>
@@ -154,7 +154,7 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Orders Table */}
           <motion.div variants={itemVars} className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="p-6 border-b border-slate-50 flex justify-between items-center bg-blue-950">
+            <div className="p-6 border-b border-slate-50 flex justify-between items-center bg-[#8E7DBE]">
               <h3 className="text-sm font-bold uppercase tracking-widest text-white">Recent Transactions</h3>
               <button className="text-white text-xs font-bold flex items-center gap-1 hover:underline">
                 View All <ArrowUpRight size={14} />
@@ -201,13 +201,13 @@ const AdminDashboard = () => {
           </motion.div>
 
           {/* User List Panel */}
-          <motion.div variants={itemVars} className="bg-black rounded-2xl p-8 text-white shadow-xl shadow-blue-950/20">
-            <h3 className="text-sm font-bold  mb-8  opacity-80">User Enrollment</h3>
+          <motion.div variants={itemVars} className="bg-[#8E7DBE] rounded-2xl p-8 text-white shadow-xl shadow-blue-950/20">
+            <h3 className="text-sm font-bold  mb-8  ">User Enrollment</h3>
             <div className="space-y-7">
               {data.users.slice(0, 5).map((user) => (
                 <div key={user._id} className="flex items-center justify-between group">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-white/10 text-white flex items-center justify-center text-xs font-bold rounded-xl group-hover:bg-blue-600 transition-colors">
+                    <div className="w-10 h-10 bg-white/10 text-white flex items-center justify-center text-xs font-bold rounded-xl group-hover:bg-white group-hover:text-black transition-colors">
                       {user.name?.charAt(0) || 'U'}
                     </div>
                     <div>

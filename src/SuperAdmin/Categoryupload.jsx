@@ -12,10 +12,14 @@ import toast from 'react-hot-toast';
 const CategoryUpload = () => {
  const API = "https://app-product-qh1f.onrender.com/api/v1";
   // Configuration for your specific niche
-  const categoryOptions = [
-    "Casualwear", "Bridal", "Officewear", "Traditional", "Modest","Collegewear", 
-    "Hijab", "Double Piece", "Kimono", "Embroidered Abaya", 
-    "Colored Abaya", "Front-Zip Abaya"
+  // const categoryOptions = [
+  //   "Casualwear", "Bridal", "Officewear", "Traditional", "Modest","Collegewear", 
+  //   "Hijab", "Double Piece", "Kimono", "Embroidered Abaya", 
+  //   "Colored Abaya", "Front-Zip Abaya"
+  // ];
+
+    const categoryOptions = [
+    "Abaya","Hijab","Accesories","Nose piece","Bag" ,"Fragrance"
   ];
 
   const [categories, setCategories] = useState([]);
@@ -168,7 +172,7 @@ const CategoryUpload = () => {
                   <ChevronDown className="absolute right-5 top-[38px] pointer-events-none text-slate-400" size={16} />
                 </div>
 
-                <div className="space-y-1">
+                {/* <div className="space-y-1">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Brief Description</label>
                   <textarea 
                     rows={3}
@@ -177,7 +181,7 @@ const CategoryUpload = () => {
                     placeholder="Describe this collection..."
                     className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-4 focus:ring-blue-900/5 outline-none transition-all resize-none"
                   />
-                </div>
+                </div> */}
 
                 <button 
                   disabled={actionLoading}
@@ -226,9 +230,7 @@ const CategoryUpload = () => {
                               <Trash2 size={16} />
                             </button>
                           </div>
-                          <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
-                            {cat.description || "No description provided."}
-                          </p>
+                         
                           <div className="mt-4 flex items-center gap-2">
                              <span className="text-[9px] font-black text-blue-600 bg-blue-50 px-2 py-1 rounded-lg uppercase tracking-wider">
                                Live in Store

@@ -7,31 +7,31 @@ const AdminNavbar = () => {
   return (
     <>
       {/* Navbar */}
-      <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
+      <nav className="bg-[#8E7DBE] shadow-md px-6 py-4 flex justify-between items-center">
         <button
-          className="md:hidden text-2xl text-gray-700"
+          className="md:hidden text-2xl text-white"
           onClick={() => setIsOpen(true)}
         >
           ☰
         </button>
 
-        <h1 className="text-xl font-semibold text-gray-800">
+        <h1 className="text-xl font-semibold text-white">
           Admin Panel
         </h1>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex gap-8 text-gray-600 font-medium">
-          <Link to="/admindashboard" className="hover:text-black transition">
+        <div className="hidden md:flex gap-8 text-white font-medium">
+          <Link to="/admindashboard" className="hover:text-black/40 transition">
             Dashboard
           </Link>
 
-          <Link to="/adminorder" className="hover:text-black transition">
+          <Link to="/adminorder" className="hover:text-black/40 transition">
             Orders
           </Link>
 
             <Link 
             to="/usermanagement"
-            className="hover:text-black transition">
+            className="hover:text-black/40 transition">
             UserManagement
             </Link>
         </div>
@@ -50,7 +50,7 @@ const AdminNavbar = () => {
         className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="p-6 border-b flex bg-blue-950 text-white justify-between items-center">
+        <div className="p-6 border-b flex bg-[#8E7DBE] text-white justify-between items-center">
           <h2 className="text-lg font-semibold">Menu</h2>
           <button
             className="text-xl"

@@ -10,10 +10,10 @@ import {
 import toast from 'react-hot-toast';
 
 const Productupload = () => {
- const API = "https://app-product-qh1f.onrender.com/api/v1";
+  const API = "https://app-product-qh1f.onrender.com/api/v1";
 
   // Abaya-Specific Dropdown Options
-  const categoryOptions = [
+  const categorywearsOptions = [
     "Casualwear", "Bridal", "Officewear", "Traditional", 
     "Modest", "Collegewear", "Hijab", "Double Piece", 
     "Kimono", "Embroidered Abaya", "Colored Abaya", "Front-Zip Abaya"
@@ -24,6 +24,10 @@ const Productupload = () => {
     "Satin", "Linen", "Velvet", "Jersey", "Nada Silk"
   ];
 
+  const mainCategoryOptions = [
+    "Abaya","Hijab","Accesories","Nose piece","Bag" ,"Fragrance"
+  ];
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,15 +35,18 @@ const Productupload = () => {
   const [deleteId, setDeleteId] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [preview, setPreview] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); // Added Search Logic
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     price: "",
     offerprice: "",
-    category: categoryOptions[0],
-    categoryType: clothTypeOptions[0], // Key matches Backend
+    category: mainCategoryOptions[0],
+    categorywears: categorywearsOptions[0],
+    clothType: clothTypeOptions[0],
+    colors: "",
+    sizes: "",
     stock: 1,
     image: null
   });
@@ -48,7 +55,7 @@ const Productupload = () => {
     try {
       const res = await axios.get(`${API}/products`);
       setProducts(res.data.products || []);
-      console.log(res)
+      console.log(res.data.products)
     } catch (error) {
       toast.error("Database sync failed");
     } finally {
@@ -60,9 +67,17 @@ const Productupload = () => {
 
   const resetForm = () => {
     setFormData({
-      name: "", description: "", price: "", offerprice: "",
-      category: categoryOptions[0], categoryType: clothTypeOptions[0],
-      stock: 1, image: null
+      name: "",
+      description: "",
+      price: "",
+      offerprice: "",
+      category: mainCategoryOptions[0],
+      categorywears: categorywearsOptions[0],
+      clothType: clothTypeOptions[0],
+      colors: "",
+      sizes: "",
+      stock: 1,
+      image: null
     });
     setPreview(null);
     setEditId(null);
@@ -71,13 +86,21 @@ const Productupload = () => {
 
   const openEditModal = (product) => {
     setEditId(product._id);
+
+    const validCategory = mainCategoryOptions.includes(product.category) 
+      ? product.category 
+      : mainCategoryOptions[0];
+
     setFormData({
       name: product.name,
       description: product.description,
       price: product.price,
       offerprice: product.offerprice || "",
       category: product.category,
-      categoryType: product.categoryType || clothTypeOptions[0], // Corrected Key
+      categorywears: product.categorywears || categorywearsOptions[0],
+      clothType: product.clothType || clothTypeOptions[0],
+      colors: product.colors || "",
+      sizes: product.sizes || "",
       stock: product.stock,
       image: null 
     });
@@ -104,7 +127,10 @@ const Productupload = () => {
       data.append("price", formData.price);
       data.append("offerprice", formData.offerprice);
       data.append("category", formData.category);
-      data.append("categoryType", formData.categoryType); // Fixed Mismatch
+      data.append("categorywears", formData.categorywears);
+      data.append("clothType", formData.clothType);
+      data.append("colors", formData.colors);
+      data.append("sizes", formData.sizes);
       data.append("stock", formData.stock);
       
       if (formData.image) {
@@ -143,7 +169,6 @@ const Productupload = () => {
     }
   };
 
-  // Filter products based on search
   const filteredProducts = products.filter(p => 
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
     p.category.toLowerCase().includes(searchTerm.toLowerCase())
@@ -211,21 +236,25 @@ const Productupload = () => {
               <motion.div layout key={product._id} className="group bg-white rounded-[2.5rem] border border-slate-200 p-5 hover:shadow-2xl hover:shadow-[#8E7DBE]/10 transition-all">
                 <div className="aspect-[4/5] bg-slate-50 rounded-[2rem] overflow-hidden mb-4 relative">
                   <img src={product.images?.[0]?.url} alt={product.name} className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute top-3 left-3 flex flex-col gap-2">
-                    <span className="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[9px] font-black text-[#8E7DBE] shadow-sm">
+                  <div className="absolute top-3 left-3 flex flex-wrap gap-2">
+                    <span className="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[9px] font-black text-[#8E7DBE] shadow-sm uppercase">
                       {product.category}
                     </span>
                     <span className="bg-slate-900/80 backdrop-blur px-3 py-1 rounded-full text-[9px] font-black text-white shadow-sm uppercase">
-                      {product.categoryType} {/* Fixed Display Field */}
+                      {product.clothType}
+                    </span>
+                    <span className="bg-violet-400/80 backdrop-blur px-3 py-1 rounded-full text-[9px] font-black text-white shadow-sm uppercase">
+                      {product.sizes}
                     </span>
                   </div>
                 </div>
                 
                 <h3 className="font-serif italic font-bold text-base text-slate-800 line-clamp-1 mb-1">{product.name}</h3>
+                <p className="text-[10px] text-slate-400 font-bold uppercase">{product.categorywears}</p>
                 
                 <div className="flex justify-between items-end mt-4">
                   <div>
-                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">Availability: <span className={product.stock < 5 ? 'text-rose-500' : 'text-emerald-500'}>{product.stock} Units</span></p>
+                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">Stock: <span className={product.stock < 5 ? 'text-rose-500' : 'text-emerald-500'}>{product.stock} Units</span></p>
                     <div className="flex items-center gap-2 mt-1">
                       {product.offerprice ? (
                         <>
@@ -289,19 +318,27 @@ const Productupload = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1 relative">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Collection</label>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Main Category</label>
                     <select value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm outline-none appearance-none cursor-pointer">
-                      {categoryOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                      {mainCategoryOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                     </select>
                     <ChevronDown className="absolute right-5 top-11 text-slate-400" size={16} />
                   </div>
                   <div className="space-y-1 relative">
                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Cloth Material</label>
-                    <select value={formData.categoryType} onChange={(e) => setFormData({...formData, categoryType: e.target.value})} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm outline-none appearance-none cursor-pointer">
+                    <select value={formData.clothType} onChange={(e) => setFormData({...formData, clothType: e.target.value})} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm outline-none appearance-none cursor-pointer">
                       {clothTypeOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                     </select>
                     <Scissors className="absolute right-5 top-11 text-slate-400" size={16} />
                   </div>
+                </div>
+
+                <div className="space-y-1 relative">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Wear Style</label>
+                  <select value={formData.categorywears} onChange={(e) => setFormData({...formData, categorywears: e.target.value})} className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm outline-none appearance-none cursor-pointer">
+                    {categorywearsOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                  <ChevronDown className="absolute right-5 top-11 text-slate-400" size={16} />
                 </div>
 
                 <div className="grid grid-cols-3 gap-4">
@@ -316,6 +353,17 @@ const Productupload = () => {
                   <div className="space-y-1">
                     <label className="text-[10px] font-black text-slate-400 uppercase">Stock Units</label>
                     <input required type="number" value={formData.stock} onChange={(e) => setFormData({...formData, stock: e.target.value})} className="w-full px-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm"/>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black text-slate-400 uppercase">Colors</label>
+                    <input value={formData.colors} onChange={(e) => setFormData({...formData, colors: e.target.value})} className="w-full px-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm" placeholder="Black, Maroon"/>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black text-slate-400 uppercase">Sizes</label>
+                    <input value={formData.sizes} onChange={(e) => setFormData({...formData, sizes: e.target.value})} className="w-full px-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm" placeholder="52, 54, 56"/>
                   </div>
                 </div>
 
@@ -337,6 +385,7 @@ const Productupload = () => {
         )}
       </AnimatePresence>
 
+      {/* Delete Confirmation (Remains same as your original) */}
       <AnimatePresence>
         {deleteId && (
           <>

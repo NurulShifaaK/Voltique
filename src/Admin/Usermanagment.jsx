@@ -30,7 +30,7 @@ const Usermanagement = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-blue-950 font-sans pb-10">
+    <div className="min-h-screen bg-slate-50 text-[#8E7DBE] font-sans pb-10">
       <AdminNavbar />
       
       <div className="max-w-[1400px] mx-auto p-6 lg:p-12">
@@ -72,17 +72,17 @@ const Usermanagement = () => {
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
           {loading ? (
             <div className="p-20 flex flex-col items-center justify-center gap-4">
-              <Loader2 className="animate-spin text-blue-950" size={32} />
+              <Loader2 className="animate-spin text-[#8E7DBE]" size={32} />
               <p className="text-sm font-medium text-slate-400">Fetching Access Logs...</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-blue-950 border-b border-slate-100">
+                <thead className="bg-[#8E7DBE] border-b border-slate-100">
                   <tr>
-                    <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Identify</th>
-                    <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Authorization</th>
-                    <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Enrollment Date</th>
+                    <th className="px-8 py-5 text-[11px] font-bold text-white uppercase tracking-widest">Identify</th>
+                    <th className="px-8 py-5 text-[11px] font-bold text-white uppercase tracking-widest">Authorization</th>
+                    <th className="px-8 py-5 text-[11px] font-bold text-white uppercase tracking-widest">Enrollment Date</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
@@ -98,11 +98,11 @@ const Usermanagement = () => {
                       >
                         <td className="px-8 py-5">
                           <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 bg-blue-950 text-white flex items-center justify-center text-xs font-bold rounded-xl shadow-inner group-hover:scale-110 transition-transform">
+                            <div className="h-10 w-10 bg-[#8E7DBE] text-white flex items-center justify-center text-xs font-bold rounded-xl shadow-inner group-hover:scale-110 transition-transform">
                               {user.name?.charAt(0) || <User size={14}/>}
                             </div>
                             <div>
-                              <div className="text-sm font-bold text-blue-950">{user.name}</div>
+                              <div className="text-sm font-bold text-black">{user.name}</div>
                               <div className="text-[11px] text-slate-400 font-mono mt-0.5">{user.email}</div>
                             </div>
                           </div>
@@ -110,7 +110,7 @@ const Usermanagement = () => {
                         <td className="px-8 py-5">
                           <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1 rounded-full border transition-all ${
                             user.role === "ADMIN" 
-                              ? "bg-blue-950 text-white border-blue-950 shadow-md shadow-blue-900/10" 
+                              ? "bg-[#8E7DBE] text-white border-[#8E7DBE] shadow-md shadow-[#8E7DBE]/10" 
                               : "bg-white text-slate-600 border-slate-200"
                           }`}>
                             {user.role === "ADMIN" ? <Shield size={10} /> : <User size={10} />}

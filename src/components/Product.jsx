@@ -7,7 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Footer from "./Footer";
 
 const Product = () => {
-  const API = "https://app-product-qh1f.onrender.com/api/v1";
+   const API = "https://app-product-qh1f.onrender.com/api/v1";
+ // const API="http://localhost:3000/api/v1"
   const [allproduct, setAllproduct] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -119,7 +120,7 @@ const Product = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    className="group cursor-pointer"
+                    className="group cursor-pointer bg-gray-200/80 rounded-2xl p-4 transition-all hover:shadow-lg"
                     onClick={() => navigate(`/singleproduct/${item._id}`)}
                   >
                     {/* Image Box */}

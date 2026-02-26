@@ -4,6 +4,7 @@ import axios from "axios";
 import { Rocket, Mail, Lock, ArrowRight, CheckCircle2, AlertCircle, X, LogIn } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/logo.png";
+import loginbg from "../assets/login.jpeg";
 
 const Login = () => {
   const API = "https://app-product-qh1f.onrender.com/api/v1";
@@ -48,14 +49,12 @@ const Login = () => {
 
       const user = res.data.user;
 
-      // Store Auth Data
       localStorage.setItem("userLoggedIn", "true");
       localStorage.setItem("userRole", user.role);
       localStorage.setItem("userid", user._id);
 
       showToast("Welcome back!", "success");
 
-      // Role-based Redirect Logic
       const roleRedirect = {
         USER: "/products",
         ADMIN: "/admindashboard",
@@ -69,27 +68,25 @@ const Login = () => {
       }, 1000);
 
     } catch (error) {
-      console.error(error.response?.data);
       showToast(error.response?.data?.message || "Invalid credentials", "error");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // --- TESTIMONIAL DATA (Sync with Register for consistency) ---
   const testimonials = [
     {
       id: 1,
-      name: "Voltique Premium",
-      initials: "VP",
-      text: "Returning to the hub of innovation? Your personalized collection is waiting.",
+      name: "SDL Creative",
+      initials: "SC",
+      text: "Experience premium quality and seamless performance with every login.",
       color: "from-violet-400 to-purple-500"
     },
     {
       id: 2,
-      name: "Smart Secure",
-      initials: "SS",
-      text: "Enterprise-grade security keeps your data and transactions protected.",
+      name: "Secure Access",
+      initials: "SA",
+      text: "Your security is our priority. Enterprise-grade protection for your account.",
       color: "from-blue-400 to-indigo-500"
     }
   ];
@@ -100,12 +97,6 @@ const Login = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, [testimonials.length]);
-
-  // --- ANIMATION VARIANTS ---
-  const floatingAnimation = (duration) => ({
-    y: [0, -25, 0],
-    transition: { duration: duration, repeat: Infinity, ease: "easeInOut" },
-  });
 
   return (
     <div className="relative min-h-screen flex bg-white font-sans">
@@ -132,20 +123,22 @@ const Login = () => {
         )}
       </AnimatePresence>
 
-      {/* --- LEFT SECTION (Visual/Dark) --- */}
-      <div className="relative flex-1 px-8 lg:px-12 py-8 hidden md:flex flex-col justify-between overflow-hidden bg-[#8E7DBE]">
+      {/* --- LEFT SECTION (Image Background) --- */}
+      <div className="flex-1 hidden md:flex relative overflow-hidden">
+        {/* Main Background Image */}
+        <img 
+          src={loginbg} 
+          alt="Login background" 
+          className="absolute inset-0 w-full h-full object-cover" 
+        />
         
-        {/* Decorative elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div animate={floatingAnimation(4)} className="absolute top-1/4 right-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
-          <motion.div animate={floatingAnimation(6)} className="absolute bottom-1/4 left-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl" />
-          <div className="absolute inset-0 opacity-5" style={{ backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`, backgroundSize: '32px 32px' }} />
-        </div>
+        {/* Dark Overlay for Text Readability */}
+        <div className="absolute inset-0 bg-black/40" />
 
-        <div className="relative z-10 flex flex-col justify-between h-full text-white">
+        <div className="relative z-10 w-full h-full p-12 flex flex-col justify-between text-white">
           <Link to="/" className="text-2xl lg:text-3xl flex items-center gap-3 font-bold tracking-tighter italic">
-            <div className="w-10 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-              <img src={logo}/>
+            <div className="w-10 h-8 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center shadow-lg border border-white/30">
+              <img src={logo} className="w-6 h-6 object-contain" alt="Logo" />
             </div>
             <span>SDL CREATIVE GROUPS</span>
           </Link>
@@ -154,17 +147,17 @@ const Login = () => {
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl lg:text-5xl font-bold leading-tight"
+              className="text-4xl text-white/60 font-bold leading-tight"
             >
-              Welcome back to the future.
+              Welcome back to <br/> Modest Elegance.
             </motion.h1>
             <p className="text-white/60 mt-6 leading-relaxed">
-              Login to access your dashboard, track orders, and explore our newest arrivals in premium technology.
+              Login to access your dashboard, track your creative orders, and explore our premium collections.
             </p>
           </div>
 
           {/* Testimonial slider */}
-          <div className="h-24 relative max-w-sm">
+          <div className="h-24 relative max-w-sm bg-black/20 backdrop-blur-lg p-6 rounded-3xl border border-white/10">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentTestimonial}
@@ -177,8 +170,8 @@ const Login = () => {
                   {testimonials[currentTestimonial].initials}
                 </div>
                 <div>
-                  <p className="text-white/80 text-sm italic leading-snug">"{testimonials[currentTestimonial].text}"</p>
-                  <p className="text-white/40 text-[10px] uppercase tracking-widest mt-2">{testimonials[currentTestimonial].name}</p>
+                  <p className="text-white/90 text-sm italic leading-snug">"{testimonials[currentTestimonial].text}"</p>
+                  <p className="text-white/50 text-[10px] uppercase tracking-widest mt-2">{testimonials[currentTestimonial].name}</p>
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -187,13 +180,13 @@ const Login = () => {
       </div>
 
       {/* --- RIGHT SECTION (Form) --- */}
-      <div className="flex-1 flex flex-col px-6 sm:px-12 justify-center bg-gray-50">
+      <div className="flex-1 flex flex-col px-6 sm:px-12 justify-center bg-white">
         <motion.div 
           initial={{ opacity: 0, x: 20 }} 
           animate={{ opacity: 1, x: 0 }} 
           className="w-full max-w-md mx-auto"
         >
-          <div className="mb-10">
+          <div className="mb-10 text-center md:text-left">
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Sign In</h1>
             <p className="text-sm text-gray-500 mt-2">Enter your credentials to access your account.</p>
           </div>
@@ -206,7 +199,7 @@ const Login = () => {
                 <input
                   value={loginemail}
                   onChange={(e) => setloginemail(e.target.value)}
-                  className="w-full px-12 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-gray-900 shadow-sm"
+                  className="w-full px-12 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#8E7DBE] transition-all text-gray-900 shadow-sm"
                   type="email"
                   placeholder="name@company.com"
                   required
@@ -217,7 +210,7 @@ const Login = () => {
             <div className="space-y-2">
               <div className="flex justify-between items-center px-1">
                 <label className="text-xs font-bold uppercase tracking-wider text-gray-400">Password</label>
-                <button type="button" className="text-[10px] font-bold text-blue-600 hover:text-blue-800 uppercase tracking-widest">
+                <button type="button" className="text-[10px] font-bold text-[#8E7DBE] hover:text-black uppercase tracking-widest transition-colors">
                   Forgot Password?
                 </button>
               </div>
@@ -226,7 +219,7 @@ const Login = () => {
                 <input
                   value={loginpass}
                   onChange={(e) => setloginpass(e.target.value)}
-                  className="w-full px-12 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all text-gray-900 shadow-sm"
+                  className="w-full px-12 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#8E7DBE] transition-all text-gray-900 shadow-sm"
                   type="password"
                   placeholder="••••••••"
                   required
@@ -239,8 +232,8 @@ const Login = () => {
               type="submit"
               className={`w-full py-4 rounded-2xl text-white font-bold flex items-center justify-center gap-3 transition-all shadow-xl
                 ${isLoading 
-                  ? "bg-blue-400 cursor-not-allowed" 
-                  : "bg-[#8E7DBE] hover:bg-black hover:scale-[1.01] active:scale-[0.99] shadow-blue-900/20"
+                  ? "bg-gray-400 cursor-not-allowed" 
+                  : "bg-[#8E7DBE] hover:bg-black hover:scale-[1.01] active:scale-[0.99] shadow-purple-900/20"
                 }`}
             >
               {isLoading ? (
@@ -259,20 +252,13 @@ const Login = () => {
               <div className="w-full border-t border-gray-100" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-gray-50 px-4 text-gray-400 font-medium">Or log in with</span>
+              <span className="bg-white px-4 text-gray-400 font-medium">Secure Login</span>
             </div>
-          </div>
-
-          <div className="flex gap-4 mb-10">
-             <button className="flex-1 flex items-center justify-center gap-2 py-3.5 border border-gray-200 rounded-2xl hover:bg-white hover:shadow-md transition-all font-semibold text-gray-700 bg-white/50">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="google" />
-                Google
-             </button>
           </div>
 
           <p className="text-center text-gray-500 text-sm">
             Don't have an account?{" "}
-            <Link to="/register" className="text-blue-600 font-bold hover:underline ml-1">
+            <Link to="/register" className="text-[#8E7DBE] font-bold hover:underline ml-1">
               Create Account
             </Link>
           </p>

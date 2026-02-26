@@ -23,13 +23,9 @@ const Orders = () => {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(`${API}/checkout/${userid}`);
-        
-        /* DATA CLEANING LOGIC:
-          1. We filter the orders array.
-          2. For each order, we check if at least one product in the 'products' array is NOT null.
-          3. This prevents "empty" order cards from appearing.
-        */
+      
         const allOrders = res.data.orders || [];
+        console.log(res.data.orders)
         const cleanOrders = allOrders.filter(order => 
           order.products && order.products.some(item => item.product !== null)
         );
