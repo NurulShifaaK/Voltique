@@ -16,21 +16,19 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const userid = localStorage.getItem("userid");
 
-  // Primary Aesthetic Color
-  const primaryColor = "#8E7DBE"; 
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(`${API}/checkout/${userid}`);
       
-        const allOrders = res.data.orders || [];
+        // const allOrders = res.data.orders || [];
         console.log(res.data.orders)
-        const cleanOrders = allOrders.filter(order => 
-          order.products && order.products.some(item => item.product !== null)
-        );
+        // const cleanOrders = allOrders.filter(order => 
+        //   order.products && order.products.some(item => item.product !== null)
+        // );
 
-        setOrders(cleanOrders);
+        setOrders(res.data.orders);
       } catch (err) {
         console.error("Error fetching orders:", err.message);
       } finally {

@@ -17,6 +17,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 
 const Checkout = () => {
   const API = "https://app-product-qh1f.onrender.com/api/v1";
@@ -48,8 +49,8 @@ const Checkout = () => {
         description: "Order Payment",
         order_id: data.orderId,
         handler: function (response) {
-          alert("Payment Successful");
-          console.log(response);
+          toast.success("Payment Successful you can complete your order");
+          // console.log(response);
           // You might want to trigger handleSubmit(null) here after successful payment
         },
         theme: {
@@ -58,8 +59,9 @@ const Checkout = () => {
       };
       const razor = new window.Razorpay(options);
       razor.open();
+
     } catch (err) {
-      console.log("Payment Error:", err);
+      toast.error("Payment Error:", err);
     }
   };
 
@@ -94,7 +96,7 @@ const Checkout = () => {
 
       const res = await axios.post(`${API}/checkout`, orderData);
       if (res.data.success) {
-        alert("Order and email send sucessfully");
+        toast.success("Order and email send sucessfully");
         navigate("/orders");
       }
     } catch (err) {
@@ -364,3 +366,6 @@ Address: ${formData.street}, ${formData.city}, ${formData.state} - ${formData.pi
 };
 
 export default Checkout;
+
+
+

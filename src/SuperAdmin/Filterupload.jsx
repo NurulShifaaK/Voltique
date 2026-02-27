@@ -1,16 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Upload, Scissors, Shirt, Palette, Loader2, CheckCircle2, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
+import AdminNavbar from '../Admin/AdminNavbar';
+import SuperAdminNav from './SuperAdminNav';
 
 const Filterupload = () => {
-     const API = "https://app-product-qh1f.onrender.com/api/v1";
+   
     const [loading, setLoading] = useState(false);
-    
-    // Dropdown data states
-    const [existingStyles, setExistingStyles] = useState([]);
-    const [existingFabrics, setExistingFabrics] = useState([]);
+      const API = "https://app-product-qh1f.onrender.com/api/v1";
+
+    // Your Specific Dropdown Options
+    const categorywearsOptions = [
+        "Casualwear", "Bridal", "Officewear", "Traditional", 
+        "Modest", "Collegewear", "Hijab", "Double Piece", 
+        "Kimono", "Embroidered Abaya", "Colored Abaya", "Front-Zip Abaya"
+    ];
+
+    const clothTypeOptions = [
+        "Nida", "Premium Chiffon", "Lexington", "Crepe", 
+        "Satin", "Linen", "Velvet", "Jersey", "Nada Silk"
+    ];
 
     const [formData, setFormData] = useState({
         wearsname: '',
@@ -22,27 +33,6 @@ const Filterupload = () => {
         wearsimage: null,
     });
 
-    // Fetch existing product attributes for the dropdowns
-    useEffect(() => {
-        const fetchProductData = async () => {
-            try {
-                const { data } = await axios.get(`${API}/products`);
-                if (data.success) {
-                    // Pull unique values from the products collection
-                    const styles = [...new Set(data.products.map(p => p.categorywears).filter(Boolean))];
-                    const fabrics = [...new Set(data.products.map(p => p.clothType).filter(Boolean))];
-                    
-                    setExistingStyles(styles);
-                    setExistingFabrics(fabrics);
-                }
-            } catch (error) {
-                console.error("Sync error:", error);
-                toast.error("Could not sync with existing products");
-            }
-        };
-        fetchProductData();
-    }, []);
-
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -53,6 +43,8 @@ const Filterupload = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!formData.wearsname) return toast.error("Please select a wear style");
+        // if (!formData.clothname) return toast.error("Please select a cloth type");
         if (!files.wearsimage) return toast.error("Please upload a style image");
         
         setLoading(true);
@@ -63,7 +55,7 @@ const Filterupload = () => {
             data.append("colors", formData.colors);
             data.append("wearsimage", files.wearsimage);
 
-            const res = await axios.post(`${API}/admin/design/new`, data);
+            const res = await axios.post(`${API}/admin/filterupload`, data);
             
             if (res.data.success) {
                 toast.success("Filter attribute synced successfully");
@@ -78,6 +70,8 @@ const Filterupload = () => {
     };
 
     return (
+        <>
+        <SuperAdminNav/>
         <div className="min-h-screen bg-slate-50 p-6 lg:p-12">
             <motion.div 
                 initial={{ opacity: 0, y: 20 }} 
@@ -91,7 +85,7 @@ const Filterupload = () => {
 
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     
-                    {/* Wear Style Dropdown + Image */}
+                    {/* Wear Style Dropdown */}
                     <div className="space-y-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100">
                         <div className="flex items-center gap-2 mb-2">
                             <Shirt size={18} className="text-[#8E7DBE]" />
@@ -102,25 +96,32 @@ const Filterupload = () => {
                                 name="wearsname"
                                 value={formData.wearsname}
                                 onChange={handleInputChange}
-                                className="w-full px-5 py-3 rounded-xl border-none bg-white shadow-sm text-sm appearance-none outline-none"
+                                className="w-full px-5 py-3 rounded-xl border-none bg-white shadow-sm text-sm appearance-none outline-none focus:ring-2 focus:ring-[#8E7DBE]/20"
                             >
-                                <option value="">Select from Products</option>
-                                {existingStyles.map(style => (
-                                    <option key={style} value={style}>{style}</option>
+                                <option value="">Select Wear Type</option>
+                                {categorywearsOptions.map(option => (
+                                    <option key={option} value={option}>{option}</option>
                                 ))}
                             </select>
                             <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                         </div>
-                        <div className="relative h-32 bg-white rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden">
-                            {files.wearsimage ? <CheckCircle2 className="text-emerald-500" /> : <Upload className="text-slate-300" />}
+                        <div className="relative h-32 bg-white rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden group">
+                            {files.wearsimage ? (
+                                <div className="flex flex-col items-center">
+                                    <CheckCircle2 className="text-emerald-500 mb-1" />
+                                    <span className="text-[10px] text-emerald-600 font-bold uppercase">Ready</span>
+                                </div>
+                            ) : (
+                                <Upload className="text-slate-300 group-hover:text-[#8E7DBE] transition-colors" />
+                            )}
                             <p className="text-[10px] font-bold mt-2 text-slate-400 uppercase tracking-tighter">
-                                {files.wearsimage ? 'Icon Selected' : 'Upload Style Icon'}
+                                {files.wearsimage ? files.wearsimage.name : 'Upload Style Icon'}
                             </p>
                             <input type="file" name="wearsimage" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
                         </div>
                     </div>
 
-                    {/* Material Dropdown (No Image) */}
+                    {/* Material Dropdown */}
                     <div className="space-y-4 p-6 bg-slate-50 rounded-[2rem] border border-slate-100">
                         <div className="flex items-center gap-2 mb-2">
                             <Scissors size={18} className="text-[#8E7DBE]" />
@@ -131,17 +132,23 @@ const Filterupload = () => {
                                 name="clothname"
                                 value={formData.clothname}
                                 onChange={handleInputChange}
-                                className="w-full px-5 py-3 rounded-xl border-none bg-white shadow-sm text-sm appearance-none outline-none"
+                                className="w-full px-5 py-3 rounded-xl border-none bg-white shadow-sm text-sm appearance-none outline-none focus:ring-2 focus:ring-[#8E7DBE]/20"
                             >
-                                <option value="">Select from Products</option>
-                                {existingFabrics.map(fabric => (
-                                    <option key={fabric} value={fabric}>{fabric}</option>
+                                <option value="">Select Fabric</option>
+                                {clothTypeOptions.map(option => (
+                                    <option key={option} value={option}>{option}</option>
                                 ))}
                             </select>
                             <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                         </div>
-                        <div className="h-32 flex items-center justify-center text-center p-4">
-                            <p className="text-[11px] text-slate-400 italic">Fabric visual assets are managed globally via the color palette below.</p>
+                        <div className="h-32 flex flex-col items-center justify-center text-center p-4 bg-white rounded-xl border border-slate-100">
+                             <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Preview Pill</p>
+                             <div 
+                                style={{ backgroundColor: formData.colors }}
+                                className="px-4 py-1.5 rounded-full text-[10px] text-white font-bold uppercase tracking-wider"
+                             >
+                                {formData.clothname || "Fabric"}
+                             </div>
                         </div>
                     </div>
 
@@ -151,25 +158,31 @@ const Filterupload = () => {
                             <div className="p-3 bg-white/10 rounded-2xl"><Palette size={24} /></div>
                             <div>
                                 <h3 className="font-bold text-lg">Filter Color</h3>
-                                <p className="text-xs text-slate-400">Map a color to the selected style/material</p>
+                                <p className="text-xs text-slate-400">Map a theme color to this filter</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-4 bg-white/5 p-2 rounded-2xl border border-white/10">
                             <input type="color" name="colors" value={formData.colors} onChange={handleInputChange} className="w-12 h-12 bg-transparent border-none cursor-pointer" />
-                            <input name="colors" value={formData.colors} onChange={handleInputChange} className="bg-transparent border-none outline-none font-mono text-sm uppercase w-24" />
+                            <input 
+                                name="colors" 
+                                value={formData.colors} 
+                                onChange={handleInputChange} 
+                                className="bg-transparent border-none outline-none font-mono text-sm uppercase w-24 text-center" 
+                            />
                         </div>
                     </div>
 
                     <button 
                         type="submit"
                         disabled={loading}
-                        className="md:col-span-2 w-full py-5 bg-[#8E7DBE] text-white rounded-[1.5rem] font-bold text-xs uppercase tracking-[0.4em] shadow-xl hover:bg-[#7a6aad] transition-all flex items-center justify-center gap-3 disabled:bg-slate-300"
+                        className="md:col-span-2 w-full py-5 bg-[#8E7DBE] text-white rounded-[1.5rem] font-bold text-xs uppercase tracking-[0.4em] shadow-xl hover:bg-[#7a6aad] transition-all flex items-center justify-center gap-3 disabled:bg-slate-300 active:scale-95"
                     >
                         {loading ? <Loader2 className="animate-spin" /> : 'Confirm Asset Sync'}
                     </button>
                 </form>
             </motion.div>
         </div>
+        </>
     );
 };
 

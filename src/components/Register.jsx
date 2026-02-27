@@ -64,26 +64,26 @@ const Register = () => {
 
   // --- TESTIMONIAL DATA ---
   const testimonials = [
-    {
+  {
       id: 1,
-      name: "Voltique Premium",
-      initials: "VP",
-      text: "Experience the next generation of sound with our curated audio collection.",
-      color: "from-violet-400 to-purple-500"
+      name: "Timeless Elegance",
+      initials: "TE",
+      text: "Discover the perfect blend of tradition and modern sophistication in every stitch.",
+      color: "from-[#8E7DBE] to-purple-400"
     },
     {
       id: 2,
-      name: "Smart Living",
-      initials: "SL",
-      text: "Intuitive gadgets that blend perfectly into your modern lifestyle.",
-      color: "from-blue-400 to-indigo-500"
+      name: "Premium Fabrics",
+      initials: "PF",
+      text: "Sourced from the finest Nida and Silk for a drape that feels as good as it looks.",
+      color: "from-slate-400 to-slate-600"
     },
     {
       id: 3,
-      name: "Global Shipping",
-      initials: "GS",
-      text: "Fast, secure, and trackable delivery to your doorstep worldwide.",
-      color: "from-pink-400 to-rose-500"
+      name: "Bespoke Modesty",
+      initials: "BM",
+      text: "Curated collections designed to empower your identity through refined fashion.",
+      color: "from-[#8E7DBE] to-indigo-500"
     }
   ];
 
@@ -110,7 +110,7 @@ const Register = () => {
     transition: { duration: duration, repeat: Infinity, ease: "easeInOut" },
   });
 
-  const heading = "Step Into the Future of Tech.";
+  const heading = "Abaya That Stole Eyes";
 
   return (
     <div className="relative min-h-screen flex bg-white font-sans">
@@ -138,7 +138,17 @@ const Register = () => {
       </AnimatePresence>
 
       {/* --- LEFT SECTION --- */}
-      <div className="relative flex-1 px-8 lg:px-12 py-8 hidden md:flex flex-col justify-between overflow-hidden bg-[#8E7DBE]">
+      <div className="relative flex-1 px-8 lg:px-12 py-8 hidden md:flex flex-col justify-between overflow-hidden">
+       
+       <div className="absolute inset-0 z-0">
+    <img 
+      src="https://i.pinimg.com/736x/c2/10/92/c21092527ff6b11d649919fd70076976.jpg" 
+      alt="Background"
+      className="w-full h-full object-cover"
+    />
+    {/* Dark Gradient Overlay to make white text readable */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/80" />
+  </div>
         
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -164,7 +174,7 @@ const Register = () => {
               ))}
             </h1>
             <motion.p variants={itemAnimation} className="text-sm lg:text-base text-white/60 mt-6 leading-relaxed">
-              Join our community of tech enthusiasts. Unlock premium gadgets, exclusive early-bird pricing, and a seamless shopping experience.
+              Join our community of Abaya that ensure every followers get premium and quality abaya
             </motion.p>
           </motion.div>
 
